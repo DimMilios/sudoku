@@ -1,0 +1,87 @@
+@startuml
+class Model {
+  - id: long
+  + String toString()
+}
+
+class UserModel {
+  - username: String
+}
+
+enum BoardDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+class BoardModel {
+  - difficulty: BoardDifficulty
+  - state
+  + save(): Memento
+  + restore(m: Memento): Memento
+}
+
+interface Memento {
+  + restore
+}
+
+class MementoImpl implements Memento {
+  - state
+  + MementoImpl(state)
+  + getState()
+}
+
+interface Command {
+  + execute()
+}
+
+class Controller {
+  - boardDao: Dao<BoardModel>
+}
+
+interface Dao<T> {
+  findAll(): Iterable<? extends T>
+  findById(id: long): T
+  save(board: T): T
+  update(board: T): T
+}
+
+interface BoardDao<BoardModel> {}
+
+class BoardDaoImpl {
+    - connection: SqlConnection
+}
+
+class SqlConnection {
+    - SqlConnection INSTANCE
+    - SqlConnection()
+    + getInstance: SqlConnection
+}
+
+class UndoCommand implements Command {
+  - backup: Memento
+  + UndoCommand()
+  + makeBackUp()
+  + execute()
+}
+
+class TurnModel {}
+
+Model <|-- UserModel
+Model <|-- TurnModel
+Model <|-- BoardModel
+
+Dao <|-- BoardDao
+BoardDao <|.. BoardDaoImpl
+
+BoardModel --> MementoImpl
+BoardDaoImpl --> BoardModel
+BoardDaoImpl -- SqlConnection
+
+UndoCommand *--> Memento
+
+Controller *--> BoardDaoImpl
+Controller --> Command
+
+BoardModel *-- BoardDifficulty
+@enduml

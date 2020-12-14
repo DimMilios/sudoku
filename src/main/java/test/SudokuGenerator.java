@@ -1,33 +1,33 @@
 package test;
 
-public class Sudoku
+public class SudokuGenerator
 {
-    int[] mat[];
-    int N; // number of columns/rows.
-    int SRN; // square root of N
-    int K; // No. Of missing digits
+    int[][] mat;
+    int size; // number of columns/rows.
+    int sizeSqrt; // square root of N
+    int missingDigits; // No. Of missing digits
 
     // Constructor
-    Sudoku(int N, int K)
+    SudokuGenerator(int size, int missingDigits)
     {
-        this.N = N;
-        this.K = K;
+        this.size = size;
+        this.missingDigits = missingDigits;
 
         // Compute square root of N
-        Double SRNd = Math.sqrt(N);
-        SRN = SRNd.intValue();
+        Double SRNd = Math.sqrt(size);
+        sizeSqrt = SRNd.intValue();
 
-        mat = new int[N][N];
+        mat = new int[size][size];
     }
 
-    // Sudoku Generator
+    // SudokuGenerator Generator
     public void fillValues()
     {
         // Fill the diagonal of SRN x SRN matrices
         fillDiagonal();
 
         // Fill remaining blocks
-        fillRemaining(0, SRN);
+        fillRemaining(0, sizeSqrt);
 
         // Remove Randomly K digits to make game
         removeKDigits();
@@ -37,7 +37,7 @@ public class Sudoku
     void fillDiagonal()
     {
 
-        for (int i = 0; i<N; i=i+SRN)
+        for (int i = 0; i< size; i=i+ sizeSqrt)
 
             // for diagonal box, start coordinates->i==j
             fillBox(i, i);
@@ -46,8 +46,8 @@ public class Sudoku
     // Returns false if given 3 x 3 block contains num.
     boolean unUsedInBox(int rowStart, int colStart, int num)
     {
-        for (int i = 0; i<SRN; i++)
-            for (int j = 0; j<SRN; j++)
+        for (int i = 0; i< sizeSqrt; i++)
+            for (int j = 0; j< sizeSqrt; j++)
                 if (mat[rowStart+i][colStart+j]==num)
                     return false;
 
@@ -58,13 +58,13 @@ public class Sudoku
     void fillBox(int row,int col)
     {
         int num;
-        for (int i=0; i<SRN; i++)
+        for (int i = 0; i< sizeSqrt; i++)
         {
-            for (int j=0; j<SRN; j++)
+            for (int j = 0; j< sizeSqrt; j++)
             {
                 do
                 {
-                    num = randomGenerator(N);
+                    num = randomGenerator(size);
                 }
                 while (!unUsedInBox(row, col, num));
 
@@ -84,13 +84,13 @@ public class Sudoku
     {
         return (unUsedInRow(i, num) &&
                 unUsedInCol(j, num) &&
-                unUsedInBox(i-i%SRN, j-j%SRN, num));
+                unUsedInBox(i-i% sizeSqrt, j-j% sizeSqrt, num));
     }
 
     // check in the row for existence
     boolean unUsedInRow(int i,int num)
     {
-        for (int j = 0; j<N; j++)
+        for (int j = 0; j< size; j++)
             if (mat[i][j] == num)
                 return false;
         return true;
@@ -99,7 +99,7 @@ public class Sudoku
     // check in the row for existence
     boolean unUsedInCol(int j,int num)
     {
-        for (int i = 0; i<N; i++)
+        for (int i = 0; i< size; i++)
             if (mat[i][j] == num)
                 return false;
         return true;
@@ -110,36 +110,36 @@ public class Sudoku
     boolean fillRemaining(int i, int j)
     {
         //  System.out.println(i+" "+j);
-        if (j>=N && i<N-1)
+        if (j>= size && i< size -1)
         {
             i = i + 1;
             j = 0;
         }
-        if (i>=N && j>=N)
+        if (i>= size && j>= size)
             return true;
 
-        if (i < SRN)
+        if (i < sizeSqrt)
         {
-            if (j < SRN)
-                j = SRN;
+            if (j < sizeSqrt)
+                j = sizeSqrt;
         }
-        else if (i < N-SRN)
+        else if (i < size - sizeSqrt)
         {
-            if (j==(int)(i/SRN)*SRN)
-                j =  j + SRN;
+            if (j==(int)(i/ sizeSqrt)* sizeSqrt)
+                j =  j + sizeSqrt;
         }
         else
         {
-            if (j == N-SRN)
+            if (j == size - sizeSqrt)
             {
                 i = i + 1;
                 j = 0;
-                if (i>=N)
+                if (i>= size)
                     return true;
             }
         }
 
-        for (int num = 1; num<=N; num++)
+        for (int num = 1; num<= size; num++)
         {
             if (CheckIfSafe(i, j, num))
             {
@@ -157,14 +157,14 @@ public class Sudoku
     // complete game
     public void removeKDigits()
     {
-        int count = K;
+        int count = missingDigits;
         while (count != 0)
         {
-            int cellId = randomGenerator(N*N);
+            int cellId = randomGenerator(size * size);
 
             // System.out.println(cellId);
             // extract coordinates i  and j
-            int i = (cellId/N);
+            int i = (cellId/ size);
             int j = cellId%9;
             if (j != 0)
                 j = j - 1;
@@ -182,9 +182,9 @@ public class Sudoku
     // Print sudoku
     public void printSudoku()
     {
-        for (int i = 0; i<N; i++)
+        for (int i = 0; i< size; i++)
         {
-            for (int j = 0; j<N; j++)
+            for (int j = 0; j< size; j++)
                 System.out.print(mat[i][j] + " ");
             System.out.println();
         }
@@ -195,7 +195,7 @@ public class Sudoku
     public static void main(String[] args)
     {
         int N = 9, K = 20;
-        Sudoku sudoku = new Sudoku(N, K);
+        SudokuGenerator sudoku = new SudokuGenerator(N, K);
         sudoku.fillValues();
         sudoku.printSudoku();
     }
