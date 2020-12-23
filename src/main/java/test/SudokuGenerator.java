@@ -1,5 +1,7 @@
 package test;
 
+import java.util.Arrays;
+
 public class SudokuGenerator
 {
     int[][] mat;
@@ -8,7 +10,7 @@ public class SudokuGenerator
     int missingDigits; // No. Of missing digits
 
     // Constructor
-    SudokuGenerator(int size, int missingDigits)
+    public SudokuGenerator(int size, int missingDigits)
     {
         this.size = size;
         this.missingDigits = missingDigits;
@@ -125,7 +127,7 @@ public class SudokuGenerator
         }
         else if (i < size - sizeSqrt)
         {
-            if (j==(int)(i/ sizeSqrt)* sizeSqrt)
+            if (j == (i/ sizeSqrt)* sizeSqrt)
                 j =  j + sizeSqrt;
         }
         else
@@ -169,8 +171,10 @@ public class SudokuGenerator
             if (j != 0)
                 j = j - 1;
 
+            if (i >= 9 || j >= 9) continue;
+
             // petaei ArrayIndexOutOfBoundsException merikes fores
-            System.out.println(i+" "+j);
+//            System.out.println(i+" "+j);
             if (mat[i][j] != 0)
             {
                 count--;
@@ -189,6 +193,16 @@ public class SudokuGenerator
             System.out.println();
         }
         System.out.println();
+    }
+
+    public int[][] getMat() {
+        return mat;
+    }
+
+    public void emptyMat() {
+        for (int i = 0; i < size; i++) {
+            Arrays.fill(this.mat[i], 0);
+        }
     }
 
     // Driver code

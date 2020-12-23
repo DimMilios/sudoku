@@ -31,12 +31,11 @@ class MementoImpl implements Memento {
   + getState()
 }
 
-interface Command {
-  + execute()
-}
-
 class Controller {
   - boardDao: Dao<BoardModel>
+  - history: Stack<Memento>
+  + undo()
+  + redo()
 }
 
 interface Dao<T> {
@@ -58,17 +57,7 @@ class SqlConnection {
     + getInstance: SqlConnection
 }
 
-class UndoCommand implements Command {
-  - backup: Memento
-  + UndoCommand()
-  + makeBackUp()
-  + execute()
-}
-
-class TurnModel {}
-
 Model <|-- UserModel
-Model <|-- TurnModel
 Model <|-- BoardModel
 
 Dao <|-- BoardDao
@@ -78,10 +67,9 @@ BoardModel --> MementoImpl
 BoardDaoImpl --> BoardModel
 BoardDaoImpl -- SqlConnection
 
-UndoCommand *--> Memento
+Controller *--> Memento
 
 Controller *--> BoardDaoImpl
-Controller --> Command
 
 BoardModel *-- BoardDifficulty
 @enduml

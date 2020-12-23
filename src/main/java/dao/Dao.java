@@ -1,19 +1,17 @@
 package dao;
 
 
-import models.Model;
+public interface Dao<T> {
 
-public interface Dao<Model> {
+    Iterable<? extends T> findAll();
 
-    Iterable<? extends Model> findAll();
+    T findById(long id);
 
-    Model findById(long id);
+    <S extends T> S save(S entity);
 
-    Model save(Model value);
+    <S extends T> S update(S entity);
 
-    Model update(Model value);
-
-    int delete(Model value);
+    int delete(T entity);
 
     int deleteById(long id);
 
