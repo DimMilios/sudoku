@@ -5,6 +5,8 @@ import java.util.Arrays;
 public class SudokuGenerator
 {
     int[][] mat;
+    int[][] solvedCopy;
+
     int size; // number of columns/rows.
     int sizeSqrt; // square root of N
     int missingDigits; // No. Of missing digits
@@ -20,6 +22,7 @@ public class SudokuGenerator
         sizeSqrt = SRNd.intValue();
 
         mat = new int[size][size];
+        solvedCopy = new int[size][size];
     }
 
     // SudokuGenerator Generator
@@ -30,6 +33,11 @@ public class SudokuGenerator
 
         // Fill remaining blocks
         fillRemaining(0, sizeSqrt);
+
+        // Keep a copy of the solution
+        for (int i = 0; i < mat.length; i++) {
+            solvedCopy[i] = Arrays.copyOf(mat[i], mat[i].length);
+        }
 
         // Remove Randomly K digits to make game
         removeKDigits();
@@ -173,7 +181,6 @@ public class SudokuGenerator
 
             if (i >= 9 || j >= 9) continue;
 
-            // petaei ArrayIndexOutOfBoundsException merikes fores
 //            System.out.println(i+" "+j);
             if (mat[i][j] != 0)
             {
@@ -189,14 +196,26 @@ public class SudokuGenerator
         for (int i = 0; i< size; i++)
         {
             for (int j = 0; j< size; j++)
-                System.out.print(mat[i][j] + " ");
+                System.out.print(solvedCopy[i][j] + " ");
             System.out.println();
         }
         System.out.println();
+
+//        for (int i = 0; i< size; i++)
+//        {
+//            for (int j = 0; j< size; j++)
+//                System.out.print(mat[i][j] + " ");
+//            System.out.println();
+//        }
+//        System.out.println();
     }
 
     public int[][] getMat() {
         return mat;
+    }
+
+    public int[][] getSolvedCopy() {
+        return solvedCopy;
     }
 
     public void emptyMat() {

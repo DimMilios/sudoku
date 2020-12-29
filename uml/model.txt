@@ -21,19 +21,9 @@ class BoardModel {
   + restore(m: Memento): Memento
 }
 
-interface Memento {
-  + restore
-}
-
-class MementoImpl implements Memento {
-  - state
-  + MementoImpl(state)
-  + getState()
-}
-
 class Controller {
   - boardDao: Dao<BoardModel>
-  - history: Stack<Memento>
+  + setCommand(c: Command)
   + undo()
   + redo()
 }
@@ -63,13 +53,22 @@ Model <|-- BoardModel
 Dao <|-- BoardDao
 BoardDao <|.. BoardDaoImpl
 
-BoardModel --> MementoImpl
 BoardDaoImpl --> BoardModel
 BoardDaoImpl -- SqlConnection
-
-Controller *--> Memento
-
 Controller *--> BoardDaoImpl
 
 BoardModel *-- BoardDifficulty
 @enduml
+
+interface Memento {
+  + restore
+}
+
+BoardModel --> MementoImpl
+Controller *--> Memento
+
+class MementoImpl implements Memento {
+  - state
+  + MementoImpl(state)
+  + getState()
+}

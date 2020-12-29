@@ -1,17 +1,30 @@
+import com.formdev.flatlaf.FlatLightLaf;
+import controller.StartGameController;
 import dao.Dao;
 import dao.InMemoryBoardDaoImpl;
-import models.BoardModel;
+import dao.InMemoryUserDaoImpl;
+import model.BoardModel;
+import model.UserModel;
+import view.MainView;
+
+import java.awt.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        Dao<BoardModel> dao = new InMemoryBoardDaoImpl();
-//        System.out.println(dao.findAll());
+        FlatLightLaf.install();
 
-//        System.out.println(dao.findById(2L));
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                MainView mainView = new MainView();
+                Dao<BoardModel> boardDao = new InMemoryBoardDaoImpl();
+                Dao<UserModel> userDao = new InMemoryUserDaoImpl();
 
-//        dao.save(new BoardModel(5L,"EASY", 0));
-        dao.save(new BoardModel("EASY", 0));
-        System.out.println(dao.findAll());
+                StartGameController startGameController = new StartGameController(boardDao, mainView);
+
+                mainView.setVisible(true);
+            }
+        });
     }
 }

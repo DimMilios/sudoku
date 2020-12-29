@@ -1,4 +1,4 @@
-package models;
+package model;
 
 import java.util.Arrays;
 
@@ -9,29 +9,29 @@ public class BoardModel extends Model {
 
     private int currentTurn;
 
-//    public BoardModel(long id, String difficulty, int[][] state, int currentTurn) {
-//        super(id);
-//        this.difficulty = difficulty;
-//        this.state = state;
-//        this.currentTurn = currentTurn;
-//    }
-
-    public BoardModel(String difficulty, int[][] state, int currentTurn) {
+    public BoardModel(long id, String difficulty, int[][] state, int currentTurn) {
+        super(id);
         this.difficulty = difficulty;
         this.state = state;
         this.currentTurn = currentTurn;
     }
 
-    public BoardModel(String difficulty, int currentTurn) {
-        this.difficulty = difficulty;
-        this.currentTurn = currentTurn;
-    }
-
-    //    public BoardModel(long id, String difficulty, int currentTurn) {
-//        super(id);
+//    public BoardModel(String difficulty, int[][] state, int currentTurn) {
+//        this.difficulty = difficulty;
+//        this.state = state;
+//        this.currentTurn = currentTurn;
+//    }
+//
+//    public BoardModel(String difficulty, int currentTurn) {
 //        this.difficulty = difficulty;
 //        this.currentTurn = currentTurn;
 //    }
+
+    public BoardModel(long id, String difficulty, int currentTurn) {
+        super(id);
+        this.difficulty = difficulty;
+        this.currentTurn = currentTurn;
+    }
 
     public String getDifficulty() {
         return difficulty;

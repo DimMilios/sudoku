@@ -1,6 +1,6 @@
 package dao;
 
-import models.BoardModel;
+import model.BoardModel;
 import test.SudokuGenerator;
 
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ public class InMemoryBoardDaoImpl implements Dao<BoardModel> {
 //        );
 
         List<BoardModel> initialValues = Arrays.asList(
-                new BoardModel("EASY", 0),
-                new BoardModel("EASY", 0),
-                new BoardModel("EASY", 0),
-                new BoardModel("EASY", 0)
+                new BoardModel(1, "EASY", 0),
+                new BoardModel(2, "EASY", 0),
+                new BoardModel(3, "EASY", 0),
+                new BoardModel(4, "EASY", 0)
         );
 
         for (BoardModel model : initialValues) {
