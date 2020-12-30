@@ -6,16 +6,7 @@ import test.SudokuGenerator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GamePanel extends JPanel {
 
@@ -23,7 +14,7 @@ public class GamePanel extends JPanel {
 	private JLabel headerLabel;
 	private JLabel usernameLabel;
 	private JPanel textFieldPanel;
-	private List<JFormattedTextField> textFields = new ArrayList<>();
+	private TextField[][] textFields = new TextField[gridSize][gridSize];
 	private JPanel[][] panels = new JPanel[3][3];
 
 	private SudokuGenerator generator;
@@ -40,11 +31,7 @@ public class GamePanel extends JPanel {
 
 		initHeader();
 
-		try {
-			initBoard();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		initBoard();
 
 		this.usernameLabel = new JLabel("PLACEHOLDER");
 
@@ -68,43 +55,43 @@ public class GamePanel extends JPanel {
 		this.add(headerPanel, BorderLayout.NORTH);
 	}
 
-	private void initBoard() throws ParseException {
+	private void initBoard() {
 		this.textFieldPanel = new JPanel(new GridLayout(3, 3));
 
 		this.textFieldPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
+		createSquarePanels();
+
+		addTextFieldsToSquarePanels();
+
+//		for (int i = 0; i < gridSize; i++) {
+//			for (int j = 0; j < gridSize; j++) {
+//				System.out.println("[i,j]: " + "[" + i + "," + j + "]" + " Value: " + textFields[i][j].getText());
+//			}
+//			System.out.println("++++++++++++++++++++");
+//		}
+
+		this.add(textFieldPanel, BorderLayout.CENTER);
+	}
+
+	private void createSquarePanels() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				JPanel squarePanel = createSquarePanel();
-				panels[i][j] = squarePanel;
+				panels[i][j] = createSquarePanel();
 				textFieldPanel.add(panels[i][j]);
 			}
 		}
+	}
 
-		MaskFormatter mask = null;
-		try {
-			mask = new MaskFormatter("#");
-			mask.setInvalidCharacters("0");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	private void addTextFieldsToSquarePanels() {
 		int[][] arr = generator.getMat();
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
-				JFormattedTextField textField = createTextField(mask, String.valueOf(arr[i][j]));
-				textFields.add(textField);
+				TextField textField = createTextField(i, j, String.valueOf(arr[i][j]), arr);
+				textFields[i][j] = textField;
 				panels[i / 3][j / 3].add(textField);
 			}
 		}
-
-		for (int i = 0; i < gridSize; i++) {
-			for (int j = 0; j < gridSize; j++) {
-				System.out.print(textFields.get(j + i * gridSize).getText() + " ");
-			}
-			System.out.println();
-		}
-
-		this.add(textFieldPanel, BorderLayout.CENTER);
 	}
 
 	private JPanel createSquarePanel() {
@@ -113,13 +100,10 @@ public class GamePanel extends JPanel {
 		return panel;
 	}
 
-	private JFormattedTextField createTextField(MaskFormatter mask, String text)  {
-		JFormattedTextField textField = new JFormattedTextField(mask);
+	private TextField createTextField(int x, int y, String text, int[][] board)  {
+		TextField textField = TextField.createTextField(x, y);
 		textField.setText(text);
-		textField.setFont(new Font("Arial", Font.BOLD, 26));
-		textField.setCaretColor(Color.WHITE);
-		textField.addKeyListener(new TextFieldKeyHandler(textField));
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
+		textField.addKeyListener(new TextFieldKeyHandler(textField, board));
 		return textField;
 	}
 

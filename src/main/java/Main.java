@@ -7,6 +7,7 @@ import model.BoardModel;
 import model.UserModel;
 import view.MainView;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Main {
@@ -14,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         FlatLightLaf.install();
 
-        EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 MainView mainView = new MainView();
