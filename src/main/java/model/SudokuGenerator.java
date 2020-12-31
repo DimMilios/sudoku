@@ -1,28 +1,41 @@
-package test;
+package model;
 
 import java.util.Arrays;
 
 public class SudokuGenerator
 {
-    int[][] mat;
-    int[][] solvedCopy;
+    private int[][] mat;
+    private int[][] solvedCopy;
 
-    int size; // number of columns/rows.
-    int sizeSqrt; // square root of N
-    int missingDigits; // No. Of missing digits
+    private int size = 9; // number of columns/rows.
+    private int sizeSqrt; // square root of N
+    private int missingDigits = 40; // No. Of missing digits
 
-    // Constructor
-    public SudokuGenerator(int size, int missingDigits)
-    {
-        this.size = size;
-        this.missingDigits = missingDigits;
+    private static SudokuGenerator instance = null;
 
+    private SudokuGenerator() {}
+
+    public void init() {
         // Compute square root of N
         Double SRNd = Math.sqrt(size);
         sizeSqrt = SRNd.intValue();
 
         mat = new int[size][size];
         solvedCopy = new int[size][size];
+
+        fillValues();
+    }
+
+    public void initWithMissingDigits(int missingDigits) {
+        this.missingDigits = missingDigits;
+        init();
+    }
+
+    public static SudokuGenerator getInstance() {
+        if (instance == null) {
+            instance = new SudokuGenerator();
+        }
+        return instance;
     }
 
     // SudokuGenerator Generator
@@ -89,31 +102,31 @@ public class SudokuGenerator
         return (int) Math.floor((Math.random()*num+1));
     }
 
-    // Check if safe to put in cell
-    boolean CheckIfSafe(int i,int j,int num)
-    {
-        return (unUsedInRow(i, num) &&
-                unUsedInCol(j, num) &&
-                unUsedInBox(i-i% sizeSqrt, j-j% sizeSqrt, num));
-    }
+//    // Check if safe to put in cell
+//    boolean CheckIfSafe(int i,int j,int num)
+//    {
+//        return (unUsedInRow(i, num) &&
+//                unUsedInCol(j, num) &&
+//                unUsedInBox(i-i% sizeSqrt, j-j% sizeSqrt, num));
+//    }
 
-    // check in the row for existence
-    boolean unUsedInRow(int i,int num)
-    {
-        for (int j = 0; j< size; j++)
-            if (mat[i][j] == num)
-                return false;
-        return true;
-    }
-
-    // check in the row for existence
-    boolean unUsedInCol(int j,int num)
-    {
-        for (int i = 0; i< size; i++)
-            if (mat[i][j] == num)
-                return false;
-        return true;
-    }
+//    // check in the row for existence
+//    boolean unUsedInRow(int i,int num)
+//    {
+//        for (int j = 0; j< size; j++)
+//            if (mat[i][j] == num)
+//                return false;
+//        return true;
+//    }
+//
+//    // check in the row for existence
+//    boolean unUsedInCol(int j,int num)
+//    {
+//        for (int i = 0; i< size; i++)
+//            if (mat[i][j] == num)
+//                return false;
+//        return true;
+//    }
 
     // A recursive function to fill remaining
     // matrix
@@ -151,7 +164,8 @@ public class SudokuGenerator
 
         for (int num = 1; num<= size; num++)
         {
-            if (CheckIfSafe(i, j, num))
+            if (SudokuValidator.isSafe(mat, i, j, num))
+//            if (CheckIfSafe(i, j, num))
             {
                 mat[i][j] = num;
                 if (fillRemaining(i, j+1))
@@ -224,11 +238,19 @@ public class SudokuGenerator
         }
     }
 
+    public int getMissingDigits() {
+        return missingDigits;
+    }
+
+    public void setMissingDigits(int missingDigits) {
+        this.missingDigits = missingDigits;
+    }
+
     // Driver code
     public static void main(String[] args)
     {
         int N = 9, K = 20;
-        SudokuGenerator sudoku = new SudokuGenerator(N, K);
+        SudokuGenerator sudoku = SudokuGenerator.getInstance();
         sudoku.fillValues();
         sudoku.printSudoku();
     }

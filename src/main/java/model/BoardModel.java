@@ -9,6 +9,10 @@ public class BoardModel extends Model {
 
     private int currentTurn;
 
+    public BoardModel() {
+        this.state = new int[9][9];
+    }
+
     public BoardModel(long id, String difficulty, int[][] state, int currentTurn) {
         super(id);
         this.difficulty = difficulty;
@@ -46,7 +50,10 @@ public class BoardModel extends Model {
     }
 
     public void setState(int[][] state) {
-        this.state = state;
+        for (int i = 0; i < state.length; i++) {
+            this.state[i] = Arrays.copyOf(state[i], state[i].length);
+        }
+        System.out.println(this.toString());
     }
 
     public int getCurrentTurn() {

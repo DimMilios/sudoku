@@ -1,16 +1,40 @@
 import com.formdev.flatlaf.FlatLightLaf;
 import controller.StartGameController;
+import controller.TextFieldController;
 import dao.Dao;
 import dao.InMemoryBoardDaoImpl;
-import dao.InMemoryUserDaoImpl;
 import model.BoardModel;
-import model.UserModel;
+import model.SudokuGenerator;
+import model.SudokuValidator;
 import view.MainView;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Main {
+
+    BoardModel boardModel;
+
+    MainView mainView;
+
+    StartGameController startGameController;
+    TextFieldController textFieldController;
+    SudokuGenerator generator;
+
+    public Main() {
+        boardModel = new BoardModel();
+        generator = SudokuGenerator.getInstance();
+        generator.init();
+        boardModel.setState(generator.getMat());
+
+        mainView = new MainView(generator);
+
+        textFieldController = new TextFieldController(boardModel, mainView);
+
+        mainView.setFieldController(textFieldController);
+        startGameController = new StartGameController(mainView);
+
+//        mainView.setVisible(true);
+    }
 
     public static void main(String[] args) {
         FlatLightLaf.install();
@@ -18,13 +42,7 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MainView mainView = new MainView();
-                Dao<BoardModel> boardDao = new InMemoryBoardDaoImpl();
-                Dao<UserModel> userDao = new InMemoryUserDaoImpl();
-
-                StartGameController startGameController = new StartGameController(boardDao, mainView);
-
-                mainView.setVisible(true);
+                new Main();
             }
         });
     }

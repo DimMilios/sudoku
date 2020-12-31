@@ -1,5 +1,7 @@
 package view;
 
+import controller.TextFieldController;
+import model.SudokuGenerator;
 import view.menu.MenuBar;
 
 import javax.swing.*;
@@ -9,6 +11,8 @@ public class MainView extends JFrame {
 
     public final static int WIDTH = 800;
     public final static int HEIGHT = 600;
+
+    private SudokuGenerator generator;
 
     private CardLayout cardLayout;
     private JPanel cardsContainer;
@@ -20,10 +24,11 @@ public class MainView extends JFrame {
     private UserPanel userPanel;
     private GamePanel gamePanel;
     private HistoryPanel historyPanel;
+    private TextFieldController fieldController;
 
-    public MainView() {
+    public MainView(SudokuGenerator generator) {
         super("Sudoku");
-        initComponents();
+        this.generator = generator;
     }
 
     private void initComponents() {
@@ -33,7 +38,7 @@ public class MainView extends JFrame {
         this.setJMenuBar(new MenuBar());
 
         this.userPanel = new UserPanel();
-        this.gamePanel = new GamePanel();
+        this.gamePanel = new GamePanel(fieldController, generator);
         this.historyPanel = new HistoryPanel();
 
         cardsContainer.add(userPanel, USER_PANEL);
@@ -46,6 +51,7 @@ public class MainView extends JFrame {
         this.setSize(WIDTH, HEIGHT);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
 
     public JPanel getCardsContainer() {
@@ -82,5 +88,10 @@ public class MainView extends JFrame {
 
     public void setHistoryPanel(HistoryPanel historyPanel) {
         this.historyPanel = historyPanel;
+    }
+
+    public void setFieldController(TextFieldController fieldController) {
+        this.fieldController = fieldController;
+        initComponents();
     }
 }

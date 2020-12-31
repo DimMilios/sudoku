@@ -1,8 +1,8 @@
 package view;
 
 import handler.LabelResizeHandler;
-import handler.TextFieldKeyHandler;
-import test.SudokuGenerator;
+import controller.TextFieldController;
+import model.SudokuGenerator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -17,12 +17,12 @@ public class GamePanel extends JPanel {
 	private TextField[][] textFields = new TextField[gridSize][gridSize];
 	private JPanel[][] panels = new JPanel[3][3];
 
+	private TextFieldController fieldController;
 	private SudokuGenerator generator;
 
-	public GamePanel() {
-		generator = new SudokuGenerator(gridSize, 40);
-		generator.fillValues();
-
+	public GamePanel(TextFieldController fieldController, SudokuGenerator generator) {
+		this.fieldController = fieldController;
+		this.generator = generator;
 		initComponents();
 	}
 
@@ -36,7 +36,6 @@ public class GamePanel extends JPanel {
 		this.usernameLabel = new JLabel("PLACEHOLDER");
 
 		this.addComponentListener(new LabelResizeHandler(usernameLabel));
-
 
 		this.add(usernameLabel, BorderLayout.SOUTH);
 	}
@@ -64,13 +63,6 @@ public class GamePanel extends JPanel {
 
 		addTextFieldsToSquarePanels();
 
-//		for (int i = 0; i < gridSize; i++) {
-//			for (int j = 0; j < gridSize; j++) {
-//				System.out.println("[i,j]: " + "[" + i + "," + j + "]" + " Value: " + textFields[i][j].getText());
-//			}
-//			System.out.println("++++++++++++++++++++");
-//		}
-
 		this.add(textFieldPanel, BorderLayout.CENTER);
 	}
 
@@ -87,7 +79,7 @@ public class GamePanel extends JPanel {
 		int[][] arr = generator.getMat();
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
-				TextField textField = createTextField(i, j, String.valueOf(arr[i][j]), arr);
+				TextField textField = createTextField(i, j, String.valueOf(arr[i][j]));
 				textFields[i][j] = textField;
 				panels[i / 3][j / 3].add(textField);
 			}
@@ -100,10 +92,10 @@ public class GamePanel extends JPanel {
 		return panel;
 	}
 
-	private TextField createTextField(int x, int y, String text, int[][] board)  {
+	private TextField createTextField(int x, int y, String text)  {
 		TextField textField = TextField.createTextField(x, y);
 		textField.setText(text);
-		textField.addKeyListener(new TextFieldKeyHandler(textField, board));
+		textField.addKeyListener(fieldController);
 		return textField;
 	}
 
