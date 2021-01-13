@@ -2,15 +2,14 @@ package view;
 
 import javax.swing.*;
 
+import static model.SudokuConstants.*;
+
 public class UserPanel extends JPanel {
 
     private JLabel nameLabel;
     private JTextField nameField;
     private JLabel difficultyLabel;
     private ButtonGroup difficultyGroup;
-    private final static String EASY = "Easy";
-    private final static String NORMAL = "Normal";
-    private final static String HARD = "Hard";
     private JRadioButton easy;
     private JRadioButton normal;
     private JRadioButton hard;

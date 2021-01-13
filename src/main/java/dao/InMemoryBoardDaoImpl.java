@@ -23,12 +23,12 @@ public class InMemoryBoardDaoImpl implements Dao<BoardModel> {
 //                new BoardModel(4,"EASY", 0)
 //        );
 
-        List<BoardModel> initialValues = Arrays.asList(
-                new BoardModel(1, "EASY", 0),
-                new BoardModel(2, "EASY", 0),
-                new BoardModel(3, "EASY", 0),
-                new BoardModel(4, "EASY", 0)
-        );
+//        List<BoardModel> initialValues = Arrays.asList(
+//                new BoardModel( "EASY", 0),
+//                new BoardModel( "EASY", 0),
+//                new BoardModel(3, "EASY", 0),
+//                new BoardModel(4, "EASY", 0)
+//        );
 
 //        for (BoardModel model : initialValues) {
 //            sudoku.fillValues();
@@ -82,4 +82,5 @@ public class InMemoryBoardDaoImpl implements Dao<BoardModel> {
     public boolean existsById(long id) {
         return false;
     }
+
 }

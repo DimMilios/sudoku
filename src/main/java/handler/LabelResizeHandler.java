@@ -2,6 +2,7 @@ package handler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -17,6 +18,7 @@ public class LabelResizeHandler implements ComponentListener {
     public void componentResized(ComponentEvent e) {
         JPanel panel = (JPanel) e.getSource();
         usernameLabel.setBorder(new EmptyBorder(20, (int) (panel.getWidth() * 0.8), 20, 20));
+        usernameLabel.setFont(new Font("Arial", Font.BOLD, 26));
     }
 
     @Override

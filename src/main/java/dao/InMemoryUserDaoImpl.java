@@ -12,7 +12,7 @@ public class InMemoryUserDaoImpl implements Dao<UserModel> {
     public InMemoryUserDaoImpl() {
         inMemoryUserDb = new ArrayList<>();
 
-        UserModel admin = new UserModel(1, "admin");
+        UserModel admin = new UserModel( "admin");
         save(admin);
     }
 

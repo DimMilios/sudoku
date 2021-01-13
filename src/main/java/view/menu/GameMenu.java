@@ -18,7 +18,6 @@ public class GameMenu extends JMenu {
         restart = new JMenuItem("Restart");
         exit = new JMenuItem("Exit");
 
-
         this.add(newGame);
         this.add(restart);
         this.add(exit);

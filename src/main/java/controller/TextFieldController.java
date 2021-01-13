@@ -38,37 +38,71 @@ public class TextFieldController implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		if (e.getSource() instanceof TextField) {
 			textField = (TextField) e.getSource();
-		} else {
-			return;
 		}
 
+		int keyCode = e.getKeyCode();
+
+		moveWithArrowKeys(keyCode);
+
 		// Replace textField text when pressing keys 1-9 or numpad 1-9
-		if (sourceIsNumber(e)) {
+		if (sourceIsNumber(keyCode)) {
+			int keyValue = Character.getNumericValue(e.getKeyChar());
+
 			textField.setText(String.valueOf(e.getKeyChar()));
-			System.out.println("TextField {x, y}: " +
-									   textField.getGridX() + ", " + textField.getGridY() +
-									   " Value: " + textField.getText());
 
 			if (!SudokuValidator.isSafe(boardModel.getState(),
 										textField.getGridX(),
 										textField.getGridY(),
-										Character.getNumericValue(
-												e.getKeyChar()))) {
-				textField.setBorder(BorderFactory.createLineBorder(new Color(200,
-																			 20,
-																			 20),
-																   3));
+										keyValue)) {
+				textField.setBorder(
+						BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
 			} else {
 				textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
 						"TextField.border"));
-				board[textField.getGridX()][textField.getGridY()] = Character.getNumericValue(e.getKeyChar());
-				boardModel.setState(board);
+//				board[textField.getGridX()][textField.getGridY()] = Character.getNumericValue(e.getKeyChar());
+//				boardModel.setState(board);
+
+				boardModel.getState()[textField.getGridX()][textField.getGridY()] = keyValue;
 			}
 		}
 	}
 
-	private boolean sourceIsNumber(KeyEvent e) {
-		return (e.getKeyCode() >= KeyEvent.VK_1 && e.getKeyCode() <= KeyEvent.VK_9)
-				|| (e.getKeyCode() >= KeyEvent.VK_NUMPAD1 && e.getKeyCode() <= KeyEvent.VK_NUMPAD9);
+	private void moveWithArrowKeys(int keyCode) {
+		int oldX = textField.getGridX();
+		int oldY = textField.getGridY();
+
+		int nextX = oldX;
+		int nextY = oldY;
+		// Check for arrow key events
+		switch (keyCode) {
+			case KeyEvent.VK_UP:
+				if (oldX > 0) {
+					nextX = oldX - 1;
+				}
+				break;
+			case KeyEvent.VK_DOWN:
+				if (oldX + 1 < 9) {
+					nextX = oldX + 1;
+				}
+				break;
+			case KeyEvent.VK_LEFT:
+				if (oldY > 0) {
+					nextY = oldY - 1;
+				}
+				break;
+			case KeyEvent.VK_RIGHT:
+				if (oldY + 1 < 9) {
+					nextY = oldY + 1;
+				}
+				break;
+		}
+
+		TextField nextField = mainView.getGamePanel().getTextFields()[nextX][nextY];
+		nextField.requestFocusInWindow();
+	}
+
+	private boolean sourceIsNumber(int keyCode) {
+		return (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_9)
+				|| (keyCode >= KeyEvent.VK_NUMPAD1 && keyCode <= KeyEvent.VK_NUMPAD9);
 	}
 }

@@ -1,39 +1,53 @@
 import com.formdev.flatlaf.FlatLightLaf;
 import controller.StartGameController;
 import controller.TextFieldController;
-import dao.Dao;
-import dao.InMemoryBoardDaoImpl;
-import model.BoardModel;
-import model.SudokuGenerator;
-import model.SudokuValidator;
+import model.*;
 import view.MainView;
+import view.TextField;
 
 import javax.swing.*;
+import java.awt.*;
+
+import static model.SudokuConstants.*;
 
 public class Main {
 
     BoardModel boardModel;
+    UserModel userModel;
 
     MainView mainView;
 
     StartGameController startGameController;
     TextFieldController textFieldController;
     SudokuGenerator generator;
+    DifficultyFactory difficultyFactory;
 
     public Main() {
-        boardModel = new BoardModel();
+        UIManager.put("FormattedTextField.inactiveForeground", new Color(0, 0, 0));
+        difficultyFactory = new DifficultyFactory();
         generator = SudokuGenerator.getInstance();
-        generator.init();
-        boardModel.setState(generator.getMat());
 
-        mainView = new MainView(generator);
+        generator.initWithMissingDigits(
+                difficultyFactory.getDifficultyStrategy(EASY).getDifficulty());
+
+        boardModel = new BoardModel(EASY, generator.getGeneratedBoard());
+
+        userModel = UserModel.getInstance();
+
+//        generator.init();
+        mainView = new MainView(boardModel);
 
         textFieldController = new TextFieldController(boardModel, mainView);
+        startGameController = new StartGameController(boardModel,
+                                                      userModel,
+                                                      mainView, textFieldController,
+                                                      generator, difficultyFactory);
 
-        mainView.setFieldController(textFieldController);
-        startGameController = new StartGameController(mainView);
+        mainView.getUserPanel()
+                .getStartButton().addActionListener(startGameController);
 
-//        mainView.setVisible(true);
+
+
     }
 
     public static void main(String[] args) {

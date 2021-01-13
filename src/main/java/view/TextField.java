@@ -22,7 +22,7 @@ public class TextField extends JFormattedTextField {
 		return new TextField(mask, gridX, gridY);
 	}
 
-	public TextField(AbstractFormatter formatter, int gridX, int gridY) {
+	private TextField(AbstractFormatter formatter, int gridX, int gridY) {
 		super(formatter);
 		this.gridX = gridX;
 		this.gridY = gridY;

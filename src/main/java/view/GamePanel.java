@@ -1,39 +1,39 @@
 package view;
 
 import handler.LabelResizeHandler;
-import controller.TextFieldController;
-import model.SudokuGenerator;
+import model.BoardModel;
+import model.UserModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+import static model.SudokuConstants.*;
+
 public class GamePanel extends JPanel {
 
-	private final static int gridSize = 9;
 	private JLabel headerLabel;
 	private JLabel usernameLabel;
 	private JPanel textFieldPanel;
-	private TextField[][] textFields = new TextField[gridSize][gridSize];
-	private JPanel[][] panels = new JPanel[3][3];
+	private TextField[][] textFields = new TextField[BOARD_SIZE][BOARD_SIZE];
+	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
 
-	private TextFieldController fieldController;
-	private SudokuGenerator generator;
+	private BoardModel boardModel;
 
-	public GamePanel(TextFieldController fieldController, SudokuGenerator generator) {
-		this.fieldController = fieldController;
-		this.generator = generator;
-		initComponents();
+	public GamePanel(BoardModel boardModel) {
+		this.boardModel = boardModel;
+//		this.setup();
 	}
 
-	private void initComponents() {
+	public void setup() {
 		this.setLayout(new BorderLayout());
 
 		initHeader();
 
 		initBoard();
 
-		this.usernameLabel = new JLabel("PLACEHOLDER");
+		this.usernameLabel = new JLabel(UserModel.getInstance().getUsername());
+		this.usernameLabel.setFont(new Font("Arial", Font.BOLD, 26));
 
 		this.addComponentListener(new LabelResizeHandler(usernameLabel));
 
@@ -55,7 +55,7 @@ public class GamePanel extends JPanel {
 	}
 
 	private void initBoard() {
-		this.textFieldPanel = new JPanel(new GridLayout(3, 3));
+		this.textFieldPanel = new JPanel(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
 
 		this.textFieldPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
@@ -67,8 +67,8 @@ public class GamePanel extends JPanel {
 	}
 
 	private void createSquarePanels() {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < SQUARE_SIZE; i++) {
+			for (int j = 0; j < SQUARE_SIZE; j++) {
 				panels[i][j] = createSquarePanel();
 				textFieldPanel.add(panels[i][j]);
 			}
@@ -76,18 +76,37 @@ public class GamePanel extends JPanel {
 	}
 
 	private void addTextFieldsToSquarePanels() {
-		int[][] arr = generator.getMat();
-		for (int i = 0; i < gridSize; i++) {
-			for (int j = 0; j < gridSize; j++) {
-				TextField textField = createTextField(i, j, String.valueOf(arr[i][j]));
-				textFields[i][j] = textField;
-				panels[i / 3][j / 3].add(textField);
+		int[][] arr = boardModel.getState();
+		int cnt = 0;
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			for (int j = 0; j < BOARD_SIZE; j++) {
+				int value = arr[i][j];
+
+				TextField textField;
+				if (value > 0) {
+					textField = createTextField(i, j, String.valueOf(value));
+					textFields[i][j] = textField;
+					textField.setEnabled(false);
+					textField.setOpaque(true);
+					textField.setBackground(new Color(255, 255, 255));
+					textField.setFont(new Font("Arial", Font.BOLD, 24));
+				} else {
+					textField = createTextField(i, j, "");
+
+					textFields[i][j] = textField;
+				}
+				panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
+
+
+				if (arr[i][j] > 0) cnt++;
 			}
 		}
+
+		System.out.println("Length: " + cnt);
 	}
 
 	private JPanel createSquarePanel() {
-		JPanel panel = new JPanel(new GridLayout(3, 3));
+		JPanel panel = new JPanel(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		return panel;
 	}
@@ -95,9 +114,14 @@ public class GamePanel extends JPanel {
 	private TextField createTextField(int x, int y, String text)  {
 		TextField textField = TextField.createTextField(x, y);
 		textField.setText(text);
-		textField.addKeyListener(fieldController);
 		return textField;
 	}
 
+	public TextField[][] getTextFields() {
+		return textFields;
+	}
 
+	public JLabel getUsernameLabel() {
+		return usernameLabel;
+	}
 }

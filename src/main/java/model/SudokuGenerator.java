@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class SudokuGenerator
 {
-    private int[][] mat;
+    private int[][] generatedBoard;
     private int[][] solvedCopy;
 
     private int size = 9; // number of columns/rows.
@@ -20,7 +20,7 @@ public class SudokuGenerator
         Double SRNd = Math.sqrt(size);
         sizeSqrt = SRNd.intValue();
 
-        mat = new int[size][size];
+        generatedBoard = new int[size][size];
         solvedCopy = new int[size][size];
 
         fillValues();
@@ -48,8 +48,8 @@ public class SudokuGenerator
         fillRemaining(0, sizeSqrt);
 
         // Keep a copy of the solution
-        for (int i = 0; i < mat.length; i++) {
-            solvedCopy[i] = Arrays.copyOf(mat[i], mat[i].length);
+        for (int i = 0; i < generatedBoard.length; i++) {
+            solvedCopy[i] = Arrays.copyOf(generatedBoard[i], generatedBoard[i].length);
         }
 
         // Remove Randomly K digits to make game
@@ -71,7 +71,7 @@ public class SudokuGenerator
     {
         for (int i = 0; i< sizeSqrt; i++)
             for (int j = 0; j< sizeSqrt; j++)
-                if (mat[rowStart+i][colStart+j]==num)
+                if (generatedBoard[rowStart+i][colStart+j]==num)
                     return false;
 
         return true;
@@ -91,7 +91,7 @@ public class SudokuGenerator
                 }
                 while (!unUsedInBox(row, col, num));
 
-                mat[row+i][col+j] = num;
+                generatedBoard[row+i][col+j] = num;
             }
         }
     }
@@ -164,14 +164,14 @@ public class SudokuGenerator
 
         for (int num = 1; num<= size; num++)
         {
-            if (SudokuValidator.isSafe(mat, i, j, num))
+            if (SudokuValidator.isSafe(generatedBoard, i, j, num))
 //            if (CheckIfSafe(i, j, num))
             {
-                mat[i][j] = num;
+                generatedBoard[i][j] = num;
                 if (fillRemaining(i, j+1))
                     return true;
 
-                mat[i][j] = 0;
+                generatedBoard[i][j] = 0;
             }
         }
         return false;
@@ -196,10 +196,10 @@ public class SudokuGenerator
             if (i >= 9 || j >= 9) continue;
 
 //            System.out.println(i+" "+j);
-            if (mat[i][j] != 0)
+            if (generatedBoard[i][j] != 0)
             {
                 count--;
-                mat[i][j] = 0;
+                generatedBoard[i][j] = 0;
             }
         }
     }
@@ -224,8 +224,8 @@ public class SudokuGenerator
 //        System.out.println();
     }
 
-    public int[][] getMat() {
-        return mat;
+    public int[][] getGeneratedBoard() {
+        return generatedBoard;
     }
 
     public int[][] getSolvedCopy() {
@@ -234,7 +234,7 @@ public class SudokuGenerator
 
     public void emptyMat() {
         for (int i = 0; i < size; i++) {
-            Arrays.fill(this.mat[i], 0);
+            Arrays.fill(this.generatedBoard[i], 0);
         }
     }
 
