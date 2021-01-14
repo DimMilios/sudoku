@@ -2,6 +2,8 @@ package view.menu;
 
 import javax.swing.*;
 
+import static model.SudokuConstants.*;
+
 public class GameMenu extends JMenu {
 
     private JMenuItem newGame;
@@ -14,9 +16,9 @@ public class GameMenu extends JMenu {
     }
 
     private void init() {
-        newGame = new JMenuItem("New Game");
-        restart = new JMenuItem("Restart");
-        exit = new JMenuItem("Exit");
+        newGame = new JMenuItem(NEW_GAME);
+        restart = new JMenuItem(RESTART);
+        exit = new JMenuItem(EXIT);
 
         this.add(newGame);
         this.add(restart);

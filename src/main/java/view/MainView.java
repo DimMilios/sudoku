@@ -32,7 +32,7 @@ public class MainView extends JFrame {
         cardLayout = new CardLayout();
         cardsContainer = new JPanel(cardLayout);
 
-        this.setJMenuBar(new MenuBar());
+        this.setJMenuBar(new MenuBar(this));
 
         this.userPanel = new UserPanel();
         this.gamePanel = new GamePanel(boardModel);
