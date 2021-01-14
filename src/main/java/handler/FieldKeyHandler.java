@@ -1,7 +1,7 @@
-package controller;
+package handler;
 
+import controller.FieldController;
 import model.BoardModel;
-import model.Model;
 import model.SudokuValidator;
 import view.MainView;
 import view.TextField;
@@ -11,17 +11,20 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class TextFieldController implements KeyListener {
+public class FieldKeyHandler implements KeyListener {
 
 	private BoardModel boardModel;
 	private MainView mainView;
-	private TextField textField;
-	private int[][] board;
+	private final FieldController fieldController;
 
-	public TextFieldController(BoardModel boardModel, MainView mainView) {
+	private TextField textField;
+
+	public FieldKeyHandler(BoardModel boardModel,
+						   MainView mainView,
+						   FieldController fieldController) {
 		this.boardModel = boardModel;
 		this.mainView = mainView;
-		this.board = boardModel.getState();
+		this.fieldController = fieldController;
 	}
 
 	@Override
@@ -41,6 +44,7 @@ public class TextFieldController implements KeyListener {
 		}
 
 		int keyCode = e.getKeyCode();
+		System.out.println(keyCode);
 
 		moveWithArrowKeys(keyCode);
 
@@ -50,17 +54,17 @@ public class TextFieldController implements KeyListener {
 
 			textField.setText(String.valueOf(e.getKeyChar()));
 
-			if (!SudokuValidator.isSafe(boardModel.getState(),
-										textField.getGridX(),
-										textField.getGridY(),
-										keyValue)) {
+			int gridX = textField.getGridX();
+			int gridY = textField.getGridY();
+
+			if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
 				textField.setBorder(
 						BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
 			} else {
 				textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
 						"TextField.border"));
 
-				boardModel.getState()[textField.getGridX()][textField.getGridY()] = keyValue;
+				fieldController.updateField(gridX, gridY, keyValue);
 			}
 		}
 	}
@@ -95,6 +99,7 @@ public class TextFieldController implements KeyListener {
 				break;
 		}
 
+		// Focus next field on arrow key move
 		TextField nextField = mainView.getGamePanel().getTextFields()[nextX][nextY];
 		nextField.requestFocusInWindow();
 	}

@@ -1,8 +1,16 @@
 package model;
 
-import java.util.Arrays;
+import observer.EventType;
+import observer.Observable;
+import observer.Observer;
 
-public class BoardModel extends Model {
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+public class BoardModel extends Model implements Observable<int[][]> {
+    private Map<Observer, EventType> observers = new HashMap<>();
+
     private String difficulty;
 
     private int[][] state;
@@ -40,6 +48,14 @@ public class BoardModel extends Model {
         for (int i = 0; i < state.length; i++) {
             this.state[i] = Arrays.copyOf(state[i], state[i].length);
         }
+        this.notify(EventType.BOARD_UPDATE, state);
+        System.out.println("State updated");
+    }
+
+    public void setField(int x, int y, int value) {
+        this.state[x][y] = value;
+        this.notify(EventType.BOARD_UPDATE, state);
+        System.out.println("State updated");
     }
 
     public int getCurrentTurn() {
@@ -63,5 +79,22 @@ public class BoardModel extends Model {
                 ", currentTurn=" + currentTurn +
                 ", id=" + id +
                 "}\n";
+    }
+
+    @Override
+    public void subscribe(EventType eventType, Observer o) {
+        this.observers.put(o, eventType);
+    }
+
+    @Override
+    public void unsubscribe(EventType eventType, Observer o) {
+        this.observers.remove(o);
+    }
+
+    @Override
+    public void notify(EventType eventType, int[][] item) {
+        for (Map.Entry<Observer, EventType> obs : observers.entrySet()) {
+            obs.getKey().update(obs.getValue());
+        }
     }
 }

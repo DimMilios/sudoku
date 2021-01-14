@@ -1,9 +1,11 @@
 import com.formdev.flatlaf.FlatLightLaf;
-import controller.StartGameController;
-import controller.TextFieldController;
+import controller.BoardController;
+import controller.FieldController;
+import controller.UserController;
+import handler.StartGameHandler;
+import handler.FieldKeyHandler;
 import model.*;
 import view.MainView;
-import view.TextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,52 +14,55 @@ import static model.SudokuConstants.*;
 
 public class Main {
 
-    BoardModel boardModel;
-    UserModel userModel;
+	BoardModel boardModel;
+	UserModel userModel;
 
-    MainView mainView;
+	MainView mainView;
 
-    StartGameController startGameController;
-    TextFieldController textFieldController;
-    SudokuGenerator generator;
-    DifficultyFactory difficultyFactory;
+	StartGameHandler startGameHandler;
+	FieldKeyHandler fieldKeyHandler;
+	SudokuGenerator generator;
+	DifficultyFactory difficultyFactory;
 
-    public Main() {
-        UIManager.put("FormattedTextField.inactiveForeground", new Color(0, 0, 0));
-        difficultyFactory = new DifficultyFactory();
-        generator = SudokuGenerator.getInstance();
+	public Main() {
+		UIManager.put("FormattedTextField.inactiveForeground", new Color(0, 0, 0));
+		difficultyFactory = new DifficultyFactory();
+		generator = SudokuGenerator.getInstance();
 
-        generator.initWithMissingDigits(
-                difficultyFactory.getDifficultyStrategy(EASY).getDifficulty());
+		generator.initWithMissingDigits(
+				difficultyFactory.getDifficultyStrategy(EASY).getDifficulty());
 
-        boardModel = new BoardModel(EASY, generator.getGeneratedBoard());
+//		boardModel = new BoardModel(EASY, generator.getGeneratedBoard());
+		boardModel = new BoardModel();
 
-        userModel = UserModel.getInstance();
+		userModel = UserModel.getInstance();
 
-//        generator.init();
-        mainView = new MainView(boardModel);
+		mainView = new MainView(boardModel, fieldKeyHandler);
+		UserController userController = new UserController(mainView);
+		BoardController boardController = new BoardController(mainView,
+															  difficultyFactory,
+															  boardModel);
+		FieldController fieldController = new FieldController(boardModel);
 
-        textFieldController = new TextFieldController(boardModel, mainView);
-        startGameController = new StartGameController(boardModel,
-                                                      userModel,
-                                                      mainView, textFieldController,
-                                                      generator, difficultyFactory);
+		fieldKeyHandler = new FieldKeyHandler(boardModel, mainView, fieldController);
+		startGameHandler = new StartGameHandler(userModel,
+												mainView, fieldKeyHandler,
+												userController,
+												boardController);
 
-        mainView.getUserPanel()
-                .getStartButton().addActionListener(startGameController);
+		mainView.getUserPanel()
+				.getStartButton().addActionListener(startGameHandler);
 
+	}
 
+	public static void main(String[] args) {
+		FlatLightLaf.install();
 
-    }
-
-    public static void main(String[] args) {
-        FlatLightLaf.install();
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Main();
-            }
-        });
-    }
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new Main();
+			}
+		});
+	}
 }

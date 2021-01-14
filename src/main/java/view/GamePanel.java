@@ -1,8 +1,11 @@
 package view;
 
+import handler.FieldKeyHandler;
 import handler.LabelResizeHandler;
 import model.BoardModel;
 import model.UserModel;
+import observer.EventType;
+import observer.Observer;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,34 +13,43 @@ import java.awt.*;
 
 import static model.SudokuConstants.*;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements Observer {
 
 	private JLabel headerLabel;
 	private JLabel usernameLabel;
 	private JPanel textFieldPanel;
 	private TextField[][] textFields = new TextField[BOARD_SIZE][BOARD_SIZE];
 	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
+	private FieldKeyHandler fieldKeyHandler;
 
 	private BoardModel boardModel;
 
-	public GamePanel(BoardModel boardModel) {
+	public GamePanel(FieldKeyHandler fieldKeyHandler, BoardModel boardModel) {
+		this.fieldKeyHandler = fieldKeyHandler;
 		this.boardModel = boardModel;
-//		this.setup();
+		this.boardModel.subscribe(EventType.BOARD_UPDATE, this);
+		this.init();
 	}
 
-	public void setup() {
+	private void init() {
 		this.setLayout(new BorderLayout());
-
 		initHeader();
-
-		initBoard();
-
 		this.usernameLabel = new JLabel(UserModel.getInstance().getUsername());
 		this.usernameLabel.setFont(new Font("Arial", Font.BOLD, 26));
+
+		this.textFieldPanel = new JPanel(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
+		this.textFieldPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+		createSquarePanels();
+		this.add(textFieldPanel, BorderLayout.CENTER);
+
 
 		this.addComponentListener(new LabelResizeHandler(usernameLabel));
 
 		this.add(usernameLabel, BorderLayout.SOUTH);
+	}
+
+	public void setup() {
+		initBoard();
 	}
 
 	private void initHeader() {
@@ -55,15 +67,15 @@ public class GamePanel extends JPanel {
 	}
 
 	private void initBoard() {
-		this.textFieldPanel = new JPanel(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
-
-		this.textFieldPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-		createSquarePanels();
 
 		addTextFieldsToSquarePanels();
 
-		this.add(textFieldPanel, BorderLayout.CENTER);
+//		for (int i = 0; i < BOARD_SIZE; i++) {
+//			for (int j = 0; j < BOARD_SIZE; j++) {
+//				textFields[i][j].addKeyListener(fieldKeyHandler);
+//			}
+//		}
+//		this.add(textFieldPanel, BorderLayout.CENTER);
 	}
 
 	private void createSquarePanels() {
@@ -123,5 +135,18 @@ public class GamePanel extends JPanel {
 
 	public JLabel getUsernameLabel() {
 		return usernameLabel;
+	}
+
+	@Override
+	public void update(EventType eventType) {
+		switch (eventType) {
+			case USERNAME_INSERT:
+				this.usernameLabel.setText(UserModel.getInstance().getUsername());
+				break;
+			case BOARD_UPDATE:
+				this.setup();
+				break;
+			default:
+		}
 	}
 }
