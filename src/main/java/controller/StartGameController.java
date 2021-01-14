@@ -39,18 +39,14 @@ public class StartGameController implements ActionListener {
 		UserPanel userPanel = this.mainView.getUserPanel();
 		GamePanel gamePanel = this.mainView.getGamePanel();
 
-		// Get difficulty user chose
 		ButtonGroup group = userPanel.getDifficultyGroup();
 		String difficulty = group.getSelection().getActionCommand();
 
-		// Get username
 		String username = userPanel.getNameField().getText();
 		username = validateUsername(username);
 
-		// Generate values and change board state
 		boardModel.setState(generateBoard(difficulty));
 
-		//
 		gamePanel.setup();
 
 		for (view.TextField[] fields : mainView.getGamePanel().getTextFields()) {

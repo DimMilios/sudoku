@@ -59,8 +59,6 @@ public class TextFieldController implements KeyListener {
 			} else {
 				textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
 						"TextField.border"));
-//				board[textField.getGridX()][textField.getGridY()] = Character.getNumericValue(e.getKeyChar());
-//				boardModel.setState(board);
 
 				boardModel.getState()[textField.getGridX()][textField.getGridY()] = keyValue;
 			}
