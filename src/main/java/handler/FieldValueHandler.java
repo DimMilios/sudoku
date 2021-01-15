@@ -1,5 +1,6 @@
 package handler;
 
+import controller.BoardController;
 import controller.FieldController;
 import model.BoardModel;
 import model.SudokuValidator;
@@ -15,16 +16,16 @@ public class FieldValueHandler implements KeyListener {
 
 	private BoardModel boardModel;
 	private MainView mainView;
-	private final FieldController fieldController;
+	private BoardController boardController;
 
 	private TextField textField;
 
 	public FieldValueHandler(BoardModel boardModel,
 							 MainView mainView,
-							 FieldController fieldController) {
+							 BoardController boardController) {
 		this.boardModel = boardModel;
 		this.mainView = mainView;
-		this.fieldController = fieldController;
+		this.boardController = boardController;
 	}
 
 	@Override
@@ -55,28 +56,30 @@ public class FieldValueHandler implements KeyListener {
 	}
 
 	private void writeNumberValue(KeyEvent e, int keyCode) {
+		if (!textField.isEditable()) return;
+
 		// Replace textField text when pressing keys 1-9 or numpad 1-9
 		int keyValue = Character.getNumericValue(e.getKeyChar());
+		boardController.updateField(textField, keyValue);
 
-		textField.setText(String.valueOf(keyValue));
 
-		int gridX = textField.getGridX();
-		int gridY = textField.getGridY();
-
-		if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
-			textField.setBorder(
-					BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
-		} else {
-			textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
-					"TextField.border"));
-
-			fieldController.updateField(gridX, gridY, keyValue);
-		}
+//		textField.setText(String.valueOf(keyValue));
+//
+//		int gridX = textField.getGridX();
+//		int gridY = textField.getGridY();
+//
+//		if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
+//			textField.setBorder(
+//					BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
+//		} else {
+//			textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
+//					"TextField.border"));
+//
+////			boardController.updateField(gridX, gridY, keyValue);
+//		}
 	}
 
 	private void moveWithArrowKeys(int keyCode) {
-//		if (!textField.isEditable()) return;
-
 		int oldX = textField.getGridX();
 		int oldY = textField.getGridY();
 

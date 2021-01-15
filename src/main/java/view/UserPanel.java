@@ -1,6 +1,12 @@
 package view;
 
+import controller.BoardController;
+import controller.UserController;
+
 import javax.swing.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static model.SudokuConstants.*;
 
@@ -14,6 +20,9 @@ public class UserPanel extends JPanel {
     private JRadioButton normal;
     private JRadioButton hard;
     private JButton startButton;
+
+    private UserController userController;
+    private BoardController boardController;
 
     public UserPanel() {
         initComponents();
@@ -37,6 +46,15 @@ public class UserPanel extends JPanel {
         difficultyGroup.add(hard);
 
         startButton = new JButton("Start");
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String difficulty = difficultyGroup.getSelection().getActionCommand();
+                String username = nameField.getText();
+                userController.update(username);
+                boardController.initializeBoard(difficulty);
+            }
+        });
 
         this.add(nameLabel);
         this.add(nameField);
@@ -47,35 +65,23 @@ public class UserPanel extends JPanel {
         this.add(startButton);
     }
 
-    public JLabel getNameLabel() {
-        return nameLabel;
-    }
-
     public JTextField getNameField() {
         return nameField;
     }
 
-    public JLabel getDifficultyLabel() {
-        return difficultyLabel;
+    public JButton getStartButton() {
+        return startButton;
     }
 
     public ButtonGroup getDifficultyGroup() {
         return difficultyGroup;
     }
 
-    public JRadioButton getEasy() {
-        return easy;
+    public void setUserController(UserController userController) {
+        this.userController = userController;
     }
 
-    public JRadioButton getNormal() {
-        return normal;
-    }
-
-    public JRadioButton getHard() {
-        return hard;
-    }
-
-    public JButton getStartButton() {
-        return startButton;
+    public void setBoardController(BoardController boardController) {
+        this.boardController = boardController;
     }
 }

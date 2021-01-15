@@ -1,10 +1,7 @@
 package view;
 
-import handler.FieldValueHandler;
 import handler.LabelResizeHandler;
 import model.BoardModel;
-import model.UserModel;
-import observer.EventType;
 import observer.Observer;
 
 import javax.swing.*;
@@ -16,30 +13,30 @@ import static model.SudokuConstants.*;
 public class GamePanel extends JPanel implements Observer {
 
 	private JLabel headerLabel;
-	private JLabel usernameLabel;
+	private UsernameLabel usernameLabel;
 	private JPanel textFieldPanel;
 	private TextField[][] textFields = new TextField[BOARD_SIZE][BOARD_SIZE];
 	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
-	private FieldValueHandler fieldValueHandler;
 
 	private BoardModel boardModel;
 
-	public GamePanel(FieldValueHandler fieldValueHandler, BoardModel boardModel) {
-		this.fieldValueHandler = fieldValueHandler;
+	public GamePanel(BoardModel boardModel) {
 		this.boardModel = boardModel;
-		this.boardModel.subscribe(EventType.BOARD_UPDATE, this);
+		this.boardModel.subscribe(this);
 		this.init();
 	}
 
 	private void init() {
 		this.setLayout(new BorderLayout());
 		initHeader();
-		this.usernameLabel = new JLabel(UserModel.getInstance().getUsername());
-		this.usernameLabel.setFont(new Font("Arial", Font.BOLD, 26));
+//		this.usernameLabel = new JLabel(UserModel.getInstance().getUsername());
+		this.usernameLabel = new UsernameLabel();
 
 		this.textFieldPanel = new JPanel(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
 		this.textFieldPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-		createSquarePanels();
+
+		setup(boardModel.getState());
+
 		this.add(textFieldPanel, BorderLayout.CENTER);
 
 
@@ -48,8 +45,8 @@ public class GamePanel extends JPanel implements Observer {
 		this.add(usernameLabel, BorderLayout.SOUTH);
 	}
 
-	public void setup() {
-		initBoard();
+	public void setup(int[][] state) {
+		initBoard(state);
 	}
 
 	private void initHeader() {
@@ -66,9 +63,10 @@ public class GamePanel extends JPanel implements Observer {
 		this.add(headerPanel, BorderLayout.NORTH);
 	}
 
-	private void initBoard() {
+	private void initBoard(int[][] state) {
+		createSquarePanels();
 
-		addTextFieldsToSquarePanels();
+		addTextFieldsToSquarePanels(state);
 
 //		for (int i = 0; i < BOARD_SIZE; i++) {
 //			for (int j = 0; j < BOARD_SIZE; j++) {
@@ -79,6 +77,10 @@ public class GamePanel extends JPanel implements Observer {
 	}
 
 	private void createSquarePanels() {
+//		textFieldPanel.removeAll();
+//		for (int i = 0; i < SQUARE_SIZE; i++) {
+//			Arrays.fill(panels[i], null);
+//		}
 		for (int i = 0; i < SQUARE_SIZE; i++) {
 			for (int j = 0; j < SQUARE_SIZE; j++) {
 				panels[i][j] = createSquarePanel();
@@ -87,12 +89,12 @@ public class GamePanel extends JPanel implements Observer {
 		}
 	}
 
-	private void addTextFieldsToSquarePanels() {
-		int[][] arr = boardModel.getState();
+	private void addTextFieldsToSquarePanels(int[][] state) {
+//		int[][] arr = boardModel.getState();
 		int cnt = 0;
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				int value = arr[i][j];
+				int value = state[i][j];
 
 				TextField textField;
 				if (value > 0) {
@@ -111,7 +113,7 @@ public class GamePanel extends JPanel implements Observer {
 				panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
 
 
-				if (arr[i][j] > 0) cnt++;
+				if (state[i][j] > 0) cnt++;
 			}
 		}
 
@@ -130,24 +132,38 @@ public class GamePanel extends JPanel implements Observer {
 		return textField;
 	}
 
+	private void updateValues(int[][] state) {
+//		 = boardModel.getState();
+		for (int i = 0; i < state.length; i++) {
+			for (int j = 0; j < state[i].length; j++) {
+				textFields[i][j].setValue(String.valueOf(state[i][j]));
+			}
+		}
+	}
+
 	public TextField[][] getTextFields() {
 		return textFields;
 	}
 
-	public JLabel getUsernameLabel() {
-		return usernameLabel;
-	}
+//	@Override
+//	public void update(EventType eventType, int[][] state) {
+//		switch (eventType) {
+//			case USERNAME_INSERT:
+//				this.usernameLabel.setText(UserModel.getInstance().getUsername());
+//				break;
+//			case BOARD_UPDATE:
+////				this.setup(state);
+////				break;
+//			case FIELD_UPDATE:
+//				updateValues();
+//				break;
+//			default:
+//		}
+//	}
 
 	@Override
-	public void update(EventType eventType) {
-		switch (eventType) {
-			case USERNAME_INSERT:
-				this.usernameLabel.setText(UserModel.getInstance().getUsername());
-				break;
-			case BOARD_UPDATE:
-				this.setup();
-				break;
-			default:
-		}
+	public void update(Object state) {
+		int[][] arr = (int[][]) state;
+		updateValues(arr);
 	}
 }

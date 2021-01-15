@@ -14,22 +14,16 @@ import java.awt.event.ActionListener;
 
 public class StartGameHandler implements ActionListener {
 
-	private final UserModel userModel;
 	private final MainView mainView;
-	private final FieldValueHandler fieldValueHandler;
 
 	private final UserController userController;
 	private final BoardController boardController;
 
 
-	public StartGameHandler(UserModel userModel,
-							MainView mainView,
-							FieldValueHandler fieldValueHandler,
+	public StartGameHandler(MainView mainView,
 							UserController userController,
 							BoardController boardController) {
-		this.userModel = userModel;
 		this.mainView = mainView;
-		this.fieldValueHandler = fieldValueHandler;
 		this.userController = userController;
 		this.boardController = boardController;
 	}
@@ -37,8 +31,6 @@ public class StartGameHandler implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		UserPanel userPanel = this.mainView.getUserPanel();
-		GamePanel gamePanel = this.mainView.getGamePanel();
-
 
 		ButtonGroup group = userPanel.getDifficultyGroup();
 		String difficulty = group.getSelection().getActionCommand();
@@ -49,29 +41,15 @@ public class StartGameHandler implements ActionListener {
 
 		boardController.update(difficulty);
 
-
-//		boardModel.setState(generateBoard(difficulty));
-
-//		gamePanel.setup();
-//		gamePanel.getUsernameLabel().setText(userModel.getUsername());
-
-
-		for (TextField[] fields : gamePanel.getTextFields()) {
-			for (TextField field : fields) {
-				field.addKeyListener(fieldValueHandler);
-			}
-		}
+//		for (TextField[] fields : gamePanel.getTextFields()) {
+//			for (TextField field : fields) {
+//				field.addKeyListener(fieldValueHandler);
+//			}
+//		}
 
 		this.mainView.getCardLayout().show(
 				this.mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
 
 	}
-
-//	private int[][] generateBoard(String difficulty) {
-//		sudokuGenerator.initWithMissingDigits(
-//				difficultyFactory.getDifficultyStrategy(difficulty).getDifficulty());
-//		return sudokuGenerator.getGeneratedBoard();
-//	}
-
 
 }

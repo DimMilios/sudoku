@@ -1,16 +1,11 @@
 package model;
 
-import observer.EventType;
 import observer.Observable;
 import observer.Observer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class UserModel extends Model implements Observable {
     private String username;
-    private Map<Observer, EventType> observers = new HashMap<>();
 
     private static UserModel instance = null;
 
@@ -34,7 +29,8 @@ public class UserModel extends Model implements Observable {
 
     public void setUsername(String username) {
         this.username = username;
-        this.notify(EventType.USERNAME_INSERT);
+        System.out.println("Updated name: " + username);
+        notifyObservers();
     }
 
     @Override
@@ -51,19 +47,19 @@ public class UserModel extends Model implements Observable {
     }
 
     @Override
-    public void subscribe(EventType eventType, Observer o) {
-        observers.put(o, eventType);
+    public void subscribe(Observer o) {
+        super.observers.add(o);
     }
 
     @Override
-    public void unsubscribe(EventType eventType, Observer o) {
-        observers.remove(o);
+    public void unsubscribe(Observer o) {
+        super.observers.remove(o);
     }
 
     @Override
-    public void notify(EventType eventType) {
-        for (Map.Entry<Observer, EventType> obs : observers.entrySet()) {
-            obs.getKey().update(obs.getValue());
+    public void notifyObservers() {
+        for (Observer o : super.observers) {
+            o.update(username);
         }
     }
 }
