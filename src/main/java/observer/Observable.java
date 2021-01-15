@@ -1,9 +1,9 @@
 package observer;
 
-public interface Observable<T> {
+public interface Observable {
 	void subscribe(EventType eventType, Observer o);
 
 	void unsubscribe(EventType eventType, Observer o);
 
-	void notify(EventType eventType, T item);
+	void notify(EventType eventType);
 }

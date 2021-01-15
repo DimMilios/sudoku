@@ -1,6 +1,6 @@
 package view;
 
-import handler.FieldKeyHandler;
+import handler.FieldValueHandler;
 import handler.LabelResizeHandler;
 import model.BoardModel;
 import model.UserModel;
@@ -20,12 +20,12 @@ public class GamePanel extends JPanel implements Observer {
 	private JPanel textFieldPanel;
 	private TextField[][] textFields = new TextField[BOARD_SIZE][BOARD_SIZE];
 	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
-	private FieldKeyHandler fieldKeyHandler;
+	private FieldValueHandler fieldValueHandler;
 
 	private BoardModel boardModel;
 
-	public GamePanel(FieldKeyHandler fieldKeyHandler, BoardModel boardModel) {
-		this.fieldKeyHandler = fieldKeyHandler;
+	public GamePanel(FieldValueHandler fieldValueHandler, BoardModel boardModel) {
+		this.fieldValueHandler = fieldValueHandler;
 		this.boardModel = boardModel;
 		this.boardModel.subscribe(EventType.BOARD_UPDATE, this);
 		this.init();
@@ -72,7 +72,7 @@ public class GamePanel extends JPanel implements Observer {
 
 //		for (int i = 0; i < BOARD_SIZE; i++) {
 //			for (int j = 0; j < BOARD_SIZE; j++) {
-//				textFields[i][j].addKeyListener(fieldKeyHandler);
+//				textFields[i][j].addKeyListener(fieldValueHandler);
 //			}
 //		}
 //		this.add(textFieldPanel, BorderLayout.CENTER);
@@ -98,7 +98,8 @@ public class GamePanel extends JPanel implements Observer {
 				if (value > 0) {
 					textField = createTextField(i, j, String.valueOf(value));
 					textFields[i][j] = textField;
-					textField.setEnabled(false);
+//					textField.setEnabled(false);
+					textField.setEditable(false);
 					textField.setOpaque(true);
 					textField.setBackground(new Color(255, 255, 255));
 					textField.setFont(new Font("Arial", Font.BOLD, 24));

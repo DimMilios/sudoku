@@ -2,8 +2,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 import controller.BoardController;
 import controller.FieldController;
 import controller.UserController;
+import handler.FieldValueHandler;
 import handler.StartGameHandler;
-import handler.FieldKeyHandler;
 import model.*;
 import view.MainView;
 
@@ -20,7 +20,7 @@ public class Main {
 	MainView mainView;
 
 	StartGameHandler startGameHandler;
-	FieldKeyHandler fieldKeyHandler;
+	FieldValueHandler fieldValueHandler;
 	SudokuGenerator generator;
 	DifficultyFactory difficultyFactory;
 
@@ -37,16 +37,16 @@ public class Main {
 
 		userModel = UserModel.getInstance();
 
-		mainView = new MainView(boardModel, fieldKeyHandler);
+		mainView = new MainView(boardModel, fieldValueHandler);
 		UserController userController = new UserController(mainView);
 		BoardController boardController = new BoardController(mainView,
 															  difficultyFactory,
 															  boardModel);
 		FieldController fieldController = new FieldController(boardModel);
 
-		fieldKeyHandler = new FieldKeyHandler(boardModel, mainView, fieldController);
+		fieldValueHandler = new FieldValueHandler(boardModel, mainView, fieldController);
 		startGameHandler = new StartGameHandler(userModel,
-												mainView, fieldKeyHandler,
+												mainView, fieldValueHandler,
 												userController,
 												boardController);
 

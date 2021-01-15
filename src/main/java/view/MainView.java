@@ -1,6 +1,6 @@
 package view;
 
-import handler.FieldKeyHandler;
+import handler.FieldValueHandler;
 import model.BoardModel;
 import view.menu.MenuBar;
 
@@ -21,12 +21,12 @@ public class MainView extends JFrame {
     private UserPanel userPanel;
     private GamePanel gamePanel;
     private HistoryPanel historyPanel;
-    private FieldKeyHandler fieldKeyHandler;
+    private FieldValueHandler fieldValueHandler;
 
-    public MainView(BoardModel boardModel, FieldKeyHandler fieldKeyHandler) {
+    public MainView(BoardModel boardModel, FieldValueHandler fieldValueHandler) {
         super("Sudoku");
         this.boardModel = boardModel;
-        this.fieldKeyHandler = fieldKeyHandler;
+        this.fieldValueHandler = fieldValueHandler;
         initComponents();
     }
 
@@ -37,7 +37,7 @@ public class MainView extends JFrame {
         this.setJMenuBar(new MenuBar(this));
 
         this.userPanel = new UserPanel();
-        this.gamePanel = new GamePanel(fieldKeyHandler, boardModel);
+        this.gamePanel = new GamePanel(fieldValueHandler, boardModel);
         this.historyPanel = new HistoryPanel();
 
         cardsContainer.add(userPanel, USER_PANEL);

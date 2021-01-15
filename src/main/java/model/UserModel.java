@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class UserModel extends Model implements Observable<String> {
+public class UserModel extends Model implements Observable {
     private String username;
     private Map<Observer, EventType> observers = new HashMap<>();
 
@@ -34,7 +34,7 @@ public class UserModel extends Model implements Observable<String> {
 
     public void setUsername(String username) {
         this.username = username;
-        this.notify(EventType.USERNAME_INSERT, username);
+        this.notify(EventType.USERNAME_INSERT);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UserModel extends Model implements Observable<String> {
     }
 
     @Override
-    public void notify(EventType eventType, String item) {
+    public void notify(EventType eventType) {
         for (Map.Entry<Observer, EventType> obs : observers.entrySet()) {
             obs.getKey().update(obs.getValue());
         }

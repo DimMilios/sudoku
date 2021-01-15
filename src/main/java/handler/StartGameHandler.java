@@ -16,7 +16,7 @@ public class StartGameHandler implements ActionListener {
 
 	private final UserModel userModel;
 	private final MainView mainView;
-	private final FieldKeyHandler fieldKeyHandler;
+	private final FieldValueHandler fieldValueHandler;
 
 	private final UserController userController;
 	private final BoardController boardController;
@@ -24,12 +24,12 @@ public class StartGameHandler implements ActionListener {
 
 	public StartGameHandler(UserModel userModel,
 							MainView mainView,
-							FieldKeyHandler fieldKeyHandler,
+							FieldValueHandler fieldValueHandler,
 							UserController userController,
 							BoardController boardController) {
 		this.userModel = userModel;
 		this.mainView = mainView;
-		this.fieldKeyHandler = fieldKeyHandler;
+		this.fieldValueHandler = fieldValueHandler;
 		this.userController = userController;
 		this.boardController = boardController;
 	}
@@ -58,7 +58,7 @@ public class StartGameHandler implements ActionListener {
 
 		for (TextField[] fields : gamePanel.getTextFields()) {
 			for (TextField field : fields) {
-				field.addKeyListener(fieldKeyHandler);
+				field.addKeyListener(fieldValueHandler);
 			}
 		}
 

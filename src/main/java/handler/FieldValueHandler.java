@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class FieldKeyHandler implements KeyListener {
+public class FieldValueHandler implements KeyListener {
 
 	private BoardModel boardModel;
 	private MainView mainView;
@@ -19,9 +19,9 @@ public class FieldKeyHandler implements KeyListener {
 
 	private TextField textField;
 
-	public FieldKeyHandler(BoardModel boardModel,
-						   MainView mainView,
-						   FieldController fieldController) {
+	public FieldValueHandler(BoardModel boardModel,
+							 MainView mainView,
+							 FieldController fieldController) {
 		this.boardModel = boardModel;
 		this.mainView = mainView;
 		this.fieldController = fieldController;
@@ -44,32 +44,39 @@ public class FieldKeyHandler implements KeyListener {
 		}
 
 		int keyCode = e.getKeyCode();
-		System.out.println(keyCode);
 
-		moveWithArrowKeys(keyCode);
 
-		// Replace textField text when pressing keys 1-9 or numpad 1-9
 		if (sourceIsNumber(keyCode)) {
-			int keyValue = Character.getNumericValue(e.getKeyChar());
+			writeNumberValue(e, keyCode);
+		}
+		else {
+			moveWithArrowKeys(keyCode);
+		}
+	}
 
-			textField.setText(String.valueOf(e.getKeyChar()));
+	private void writeNumberValue(KeyEvent e, int keyCode) {
+		// Replace textField text when pressing keys 1-9 or numpad 1-9
+		int keyValue = Character.getNumericValue(e.getKeyChar());
 
-			int gridX = textField.getGridX();
-			int gridY = textField.getGridY();
+		textField.setText(String.valueOf(keyValue));
 
-			if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
-				textField.setBorder(
-						BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
-			} else {
-				textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
-						"TextField.border"));
+		int gridX = textField.getGridX();
+		int gridY = textField.getGridY();
 
-				fieldController.updateField(gridX, gridY, keyValue);
-			}
+		if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
+			textField.setBorder(
+					BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
+		} else {
+			textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
+					"TextField.border"));
+
+			fieldController.updateField(gridX, gridY, keyValue);
 		}
 	}
 
 	private void moveWithArrowKeys(int keyCode) {
+//		if (!textField.isEditable()) return;
+
 		int oldX = textField.getGridX();
 		int oldY = textField.getGridY();
 
@@ -97,6 +104,8 @@ public class FieldKeyHandler implements KeyListener {
 					nextY = oldY + 1;
 				}
 				break;
+			default:
+				return;
 		}
 
 		// Focus next field on arrow key move
