@@ -102,32 +102,6 @@ public class SudokuGenerator
         return (int) Math.floor((Math.random()*num+1));
     }
 
-//    // Check if safe to put in cell
-//    boolean CheckIfSafe(int i,int j,int num)
-//    {
-//        return (unUsedInRow(i, num) &&
-//                unUsedInCol(j, num) &&
-//                unUsedInBox(i-i% sizeSqrt, j-j% sizeSqrt, num));
-//    }
-
-//    // check in the row for existence
-//    boolean unUsedInRow(int i,int num)
-//    {
-//        for (int j = 0; j< size; j++)
-//            if (mat[i][j] == num)
-//                return false;
-//        return true;
-//    }
-//
-//    // check in the row for existence
-//    boolean unUsedInCol(int j,int num)
-//    {
-//        for (int i = 0; i< size; i++)
-//            if (mat[i][j] == num)
-//                return false;
-//        return true;
-//    }
-
     // A recursive function to fill remaining
     // matrix
     boolean fillRemaining(int i, int j)

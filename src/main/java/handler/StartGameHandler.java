@@ -3,9 +3,7 @@ package handler;
 import controller.BoardController;
 import controller.UserController;
 import model.*;
-import view.GamePanel;
 import view.MainView;
-import view.TextField;
 import view.UserPanel;
 
 import javax.swing.*;

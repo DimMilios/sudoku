@@ -2,6 +2,8 @@ package controller;
 
 import handler.FieldValueHandler;
 import model.*;
+import view.DefaultFieldState;
+import view.IncorrectFieldState;
 import view.MainView;
 import view.TextField;
 
@@ -27,12 +29,12 @@ public class BoardController {
 
 	public void initializeBoard(String difficulty) {
 		update(difficulty);
-		addListener(fieldValueHandler);
+		addFieldListeners(fieldValueHandler);
 		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
 	}
 
-	public void addListener(KeyListener listener) {
-		TextField[][] textFields = mainView.getGamePanel().getTextFields();
+	public void addFieldListeners(KeyListener listener) {
+		TextField[][] textFields = mainView.getGamePanel().getBoardPanel().getTextFields();
 		for (TextField[] fields : textFields) {
 			for (TextField field : fields) {
 				field.addKeyListener(listener);
@@ -47,9 +49,10 @@ public class BoardController {
 	}
 
 	public void update(String difficulty) {
-		System.out.println(boardModel.toString());
+//		System.out.println(boardModel.toString());
+		boardModel.setDifficulty(difficulty);
 		boardModel.setState(generateBoard(difficulty));
-		System.out.println(boardModel.toString());
+//		System.out.println(boardModel.toString());
 	}
 
 	public void updateField(int gridX, int gridY, int keyValue) {
@@ -65,14 +68,13 @@ public class BoardController {
 		int gridY = textField.getGridY();
 
 		if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
-			textField.setBorder(
-					BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
-		} else {
-			textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
-					"TextField.border"));
-
+			IncorrectFieldState fieldState = new IncorrectFieldState(textField);
+			textField.setFieldState(fieldState);
+		}
+		else {
+			DefaultFieldState fieldState = new DefaultFieldState(textField);
+			textField.setFieldState(fieldState);
 			updateField(textField.getGridX(), textField.getGridY(), keyValue);
-//			boardController.updateField(gridX, gridY, keyValue);
 		}
 	}
 }

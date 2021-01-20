@@ -2,51 +2,45 @@ package view;
 
 import handler.LabelResizeHandler;
 import model.BoardModel;
-import observer.Observer;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static model.SudokuConstants.*;
 
-public class GamePanel extends JPanel implements Observer {
+public class GamePanel extends JPanel {
 
 	private JLabel headerLabel;
 	private UsernameLabel usernameLabel;
-	private JPanel textFieldPanel;
-	private TextField[][] textFields = new TextField[BOARD_SIZE][BOARD_SIZE];
-	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
+	private DifficultyLabel difficultyLabel;
+	private BoardPanel boardPanel;
 
 	private BoardModel boardModel;
 
 	public GamePanel(BoardModel boardModel) {
 		this.boardModel = boardModel;
-		this.boardModel.subscribe(this);
 		this.init();
 	}
 
 	private void init() {
 		this.setLayout(new BorderLayout());
 		initHeader();
-//		this.usernameLabel = new JLabel(UserModel.getInstance().getUsername());
 		this.usernameLabel = new UsernameLabel();
+		this.difficultyLabel = new DifficultyLabel(boardModel);
 
-		this.textFieldPanel = new JPanel(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
-		this.textFieldPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+		this.boardPanel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
+		this.add(boardPanel, BorderLayout.CENTER);
 
-		setup(boardModel.getState());
+//		this.addComponentListener(new LabelResizeHandler(usernameLabel));
 
-		this.add(textFieldPanel, BorderLayout.CENTER);
-
-
-		this.addComponentListener(new LabelResizeHandler(usernameLabel));
-
-		this.add(usernameLabel, BorderLayout.SOUTH);
+		JPanel info = new JPanel(new BorderLayout());
+		info.add(usernameLabel, BorderLayout.WEST);
+		info.add(difficultyLabel, BorderLayout.EAST);
+		this.add(info, BorderLayout.SOUTH);
 	}
 
-	public void setup(int[][] state) {
-		initBoard(state);
+	public BoardPanel getBoardPanel() {
+		return boardPanel;
 	}
 
 	private void initHeader() {
@@ -61,109 +55,5 @@ public class GamePanel extends JPanel implements Observer {
 		headerPanel.setBounds(0, 0, this.getWidth(), (int) (this.getHeight() * 0.3));
 		headerPanel.add(headerLabel);
 		this.add(headerPanel, BorderLayout.NORTH);
-	}
-
-	private void initBoard(int[][] state) {
-		createSquarePanels();
-
-		addTextFieldsToSquarePanels(state);
-
-//		for (int i = 0; i < BOARD_SIZE; i++) {
-//			for (int j = 0; j < BOARD_SIZE; j++) {
-//				textFields[i][j].addKeyListener(fieldValueHandler);
-//			}
-//		}
-//		this.add(textFieldPanel, BorderLayout.CENTER);
-	}
-
-	private void createSquarePanels() {
-//		textFieldPanel.removeAll();
-//		for (int i = 0; i < SQUARE_SIZE; i++) {
-//			Arrays.fill(panels[i], null);
-//		}
-		for (int i = 0; i < SQUARE_SIZE; i++) {
-			for (int j = 0; j < SQUARE_SIZE; j++) {
-				panels[i][j] = createSquarePanel();
-				textFieldPanel.add(panels[i][j]);
-			}
-		}
-	}
-
-	private void addTextFieldsToSquarePanels(int[][] state) {
-//		int[][] arr = boardModel.getState();
-		int cnt = 0;
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			for (int j = 0; j < BOARD_SIZE; j++) {
-				int value = state[i][j];
-
-				TextField textField;
-				if (value > 0) {
-					textField = createTextField(i, j, String.valueOf(value));
-					textFields[i][j] = textField;
-//					textField.setEnabled(false);
-					textField.setEditable(false);
-					textField.setOpaque(true);
-					textField.setBackground(new Color(255, 255, 255));
-					textField.setFont(new Font("Arial", Font.BOLD, 24));
-				} else {
-					textField = createTextField(i, j, "");
-
-					textFields[i][j] = textField;
-				}
-				panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
-
-
-				if (state[i][j] > 0) cnt++;
-			}
-		}
-
-		System.out.println("Length: " + cnt);
-	}
-
-	private JPanel createSquarePanel() {
-		JPanel panel = new JPanel(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		return panel;
-	}
-
-	private TextField createTextField(int x, int y, String text)  {
-		TextField textField = TextField.createTextField(x, y);
-		textField.setText(text);
-		return textField;
-	}
-
-	private void updateValues(int[][] state) {
-//		 = boardModel.getState();
-		for (int i = 0; i < state.length; i++) {
-			for (int j = 0; j < state[i].length; j++) {
-				textFields[i][j].setValue(String.valueOf(state[i][j]));
-			}
-		}
-	}
-
-	public TextField[][] getTextFields() {
-		return textFields;
-	}
-
-//	@Override
-//	public void update(EventType eventType, int[][] state) {
-//		switch (eventType) {
-//			case USERNAME_INSERT:
-//				this.usernameLabel.setText(UserModel.getInstance().getUsername());
-//				break;
-//			case BOARD_UPDATE:
-////				this.setup(state);
-////				break;
-//			case FIELD_UPDATE:
-//				updateValues();
-//				break;
-//			default:
-//		}
-//	}
-
-	@Override
-	public void update(Object state) {
-		int[][] arr = (int[][]) state;
-		updateValues(arr);
 	}
 }

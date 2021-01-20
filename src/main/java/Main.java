@@ -24,10 +24,6 @@ public class Main {
 	public Main() {
 		UIManager.put("FormattedTextField.inactiveForeground", new Color(0, 0, 0));
 		difficultyFactory = new DifficultyFactory();
-		generator = SudokuGenerator.getInstance();
-
-		generator.initWithMissingDigits(
-				difficultyFactory.getDifficultyStrategy(EASY).getDifficulty());
 
 //		boardModel = new BoardModel(EASY, generator.getGeneratedBoard());
 		boardModel = new BoardModel();

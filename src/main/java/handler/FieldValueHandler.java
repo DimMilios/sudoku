@@ -1,14 +1,11 @@
 package handler;
 
 import controller.BoardController;
-import controller.FieldController;
 import model.BoardModel;
-import model.SudokuValidator;
+import view.DisabledFieldState;
 import view.MainView;
 import view.TextField;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -47,7 +44,7 @@ public class FieldValueHandler implements KeyListener {
 		int keyCode = e.getKeyCode();
 
 
-		if (sourceIsNumber(keyCode)) {
+		if (keyIsNumeric(keyCode)) {
 			writeNumberValue(e, keyCode);
 		}
 		else {
@@ -56,11 +53,13 @@ public class FieldValueHandler implements KeyListener {
 	}
 
 	private void writeNumberValue(KeyEvent e, int keyCode) {
-		if (!textField.isEditable()) return;
-
-		// Replace textField text when pressing keys 1-9 or numpad 1-9
-		int keyValue = Character.getNumericValue(e.getKeyChar());
-		boardController.updateField(textField, keyValue);
+//		if (!textField.isEditable()) return;
+//		System.out.println(textField.getFieldState().getClass());
+		if (!(textField.getFieldState() instanceof DisabledFieldState)) {
+			// Replace textField text when pressing keys 1-9 or numpad 1-9
+			int keyValue = Character.getNumericValue(e.getKeyChar());
+			boardController.updateField(textField, keyValue);
+		}
 
 
 //		textField.setText(String.valueOf(keyValue));
@@ -112,11 +111,11 @@ public class FieldValueHandler implements KeyListener {
 		}
 
 		// Focus next field on arrow key move
-		TextField nextField = mainView.getGamePanel().getTextFields()[nextX][nextY];
+		TextField nextField = mainView.getGamePanel().getBoardPanel().getTextFields()[nextX][nextY];
 		nextField.requestFocusInWindow();
 	}
 
-	private boolean sourceIsNumber(int keyCode) {
+	private boolean keyIsNumeric(int keyCode) {
 		return (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_9)
 				|| (keyCode >= KeyEvent.VK_NUMPAD1 && keyCode <= KeyEvent.VK_NUMPAD9);
 	}

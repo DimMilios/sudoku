@@ -29,7 +29,6 @@ public class UserModel extends Model implements Observable {
 
     public void setUsername(String username) {
         this.username = username;
-        System.out.println("Updated name: " + username);
         notifyObservers();
     }
 

@@ -17,7 +17,6 @@ public class UserController {
     public void update(String username) {
         UserModel.getInstance()
                  .setUsername(validate(username));
-        System.out.println(UserModel.getInstance().getUsername());
     }
 
     private String validate(String username) {

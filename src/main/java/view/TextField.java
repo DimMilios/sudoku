@@ -9,8 +9,9 @@ public class TextField extends JFormattedTextField {
 
 	private int gridX;
 	private int gridY;
+	private FieldState fieldState;
 
-	public static TextField createTextField(int gridX, int gridY) {
+	public static MaskFormatter addFormatter() {
 		MaskFormatter mask = null;
 		try {
 			mask = new MaskFormatter("#");
@@ -18,15 +19,20 @@ public class TextField extends JFormattedTextField {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
-		return new TextField(mask, gridX, gridY);
+		return mask;
 	}
 
-	private TextField(AbstractFormatter formatter, int gridX, int gridY) {
-		super(formatter);
+	public TextField() {
+		super(addFormatter());
+		init();
+	}
+
+	public TextField(int gridX, int gridY, int value) {
+		super(addFormatter());
 		this.gridX = gridX;
 		this.gridY = gridY;
 		init();
+		initState(value);
 	}
 
 	private void init() {
@@ -35,19 +41,28 @@ public class TextField extends JFormattedTextField {
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
-	public int getGridX() {
-		return gridX;
+	private void initState(int value) {
+		if (value >= 1 && value <= 9) {
+			this.fieldState = new DisabledFieldState(this);
+			this.setText(String.valueOf(value));
+		} else {
+		  this.fieldState = new DefaultFieldState(this);
+		}
 	}
 
-	public void setGridX(int gridX) {
-		this.gridX = gridX;
+	public int getGridX() {
+		return gridX;
 	}
 
 	public int getGridY() {
 		return gridY;
 	}
 
-	public void setGridY(int gridY) {
-		this.gridY = gridY;
+	public FieldState getFieldState() {
+		return fieldState;
+	}
+
+	public void setFieldState(FieldState fieldState) {
+		this.fieldState = fieldState;
 	}
 }
