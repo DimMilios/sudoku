@@ -3,6 +3,8 @@ package model;
 import observer.Observable;
 import observer.Observer;
 
+import java.util.ArrayList;
+
 
 public class UserModel extends Model implements Observable {
     private String username;
@@ -10,6 +12,7 @@ public class UserModel extends Model implements Observable {
     private static UserModel instance = null;
 
     private UserModel() {
+        super(new ArrayList<>());
     }
 
     public static UserModel getInstance() {
@@ -20,6 +23,7 @@ public class UserModel extends Model implements Observable {
     }
 
     public UserModel(String username) {
+        super(new ArrayList<>());
         this.username = username;
     }
 
@@ -47,17 +51,17 @@ public class UserModel extends Model implements Observable {
 
     @Override
     public void subscribe(Observer o) {
-        super.observers.add(o);
+        this.observers.add(o);
     }
 
     @Override
     public void unsubscribe(Observer o) {
-        super.observers.remove(o);
+        this.observers.remove(o);
     }
 
     @Override
     public void notifyObservers() {
-        for (Observer o : super.observers) {
+        for (Observer o : this.observers) {
             o.update(username);
         }
     }

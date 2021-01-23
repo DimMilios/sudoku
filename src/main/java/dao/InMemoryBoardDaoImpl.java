@@ -67,20 +67,4 @@ public class InMemoryBoardDaoImpl implements Dao<BoardModel> {
         return null;
     }
 
-    public int delete(BoardModel entity) {
-        return 0;
-    }
-
-    public int deleteById(long id) {
-        return 0;
-    }
-
-    public long count() {
-        return 0;
-    }
-
-    public boolean existsById(long id) {
-        return false;
-    }
-
 }

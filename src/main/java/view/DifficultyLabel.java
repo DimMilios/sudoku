@@ -20,8 +20,8 @@ public class DifficultyLabel extends JLabel implements Observer {
 
 	@Override
 	public void update(Object state) {
-		if (boardModel.getDifficulty() != null) {
-			this.setText("Difficulty: " + boardModel.getDifficulty());
+		if (boardModel.last().getDifficulty() != null) {
+			this.setText("Difficulty: " + boardModel.last().getDifficulty());
 		}
 	}
 }

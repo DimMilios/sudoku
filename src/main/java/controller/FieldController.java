@@ -21,7 +21,7 @@ public class FieldController {
 	}
 
 	public void updateField(int gridX, int gridY, int keyValue) {
-		boardModel.setField(gridX, gridY, keyValue);
+//		boardModel.setField(gridX, gridY, keyValue);
 	}
 
 	public void addListener(EventListener listener) {

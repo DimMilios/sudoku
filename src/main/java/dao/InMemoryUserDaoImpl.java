@@ -39,23 +39,4 @@ public class InMemoryUserDaoImpl implements Dao<UserModel> {
         return null;
     }
 
-    @Override
-    public int delete(UserModel entity) {
-        return 0;
-    }
-
-    @Override
-    public int deleteById(long id) {
-        return 0;
-    }
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public boolean existsById(long id) {
-        return false;
-    }
 }
