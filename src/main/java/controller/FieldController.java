@@ -2,7 +2,7 @@ package controller;
 
 import model.BoardModel;
 import view.MainView;
-import view.TextField;
+import view.game.TextField;
 
 import java.awt.event.KeyListener;
 import java.util.EventListener;

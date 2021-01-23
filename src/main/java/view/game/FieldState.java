@@ -1,4 +1,4 @@
-package view;
+package view.game;
 
 public abstract class FieldState {
 	protected TextField textField;

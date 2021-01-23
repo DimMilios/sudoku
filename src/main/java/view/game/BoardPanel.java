@@ -1,5 +1,6 @@
-package view;
+package view.game;
 
+import controller.BoardController;
 import model.BoardModel;
 import model.SudokuValidator;
 import observer.Observer;
@@ -7,35 +8,37 @@ import observer.Observer;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-import static model.SudokuConstants.BOARD_SIZE;
-import static model.SudokuConstants.SQUARE_SIZE;
+import static model.SudokuConstants.*;
 
 // A panel containing all the 3x3 subsquares
 public class BoardPanel extends JPanel implements Observer {
-	private int rows;
-	private int cols;
+	private final int rows;
+	private final int cols;
 
 	private BoardModel boardModel;
 	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
 	private TextField[][] textFields;
-	private boolean initRound = true;
+	private boolean gameOver;
+	private BoardController boardController;
 
-	public BoardPanel(int rows, int cols, BoardModel boardModel) {
+	public BoardPanel(int rows,
+					  int cols,
+					  BoardModel boardModel) {
 		this.rows = rows;
 		this.cols = cols;
 		this.boardModel = boardModel;
 		this.boardModel.subscribe(this);
-		init();
+		setup();
 	}
 
-	private void init() {
+	public void setup() {
 		this.textFields = new TextField[rows][cols];
+		this.gameOver = false;
 		this.setLayout(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
 		this.setBorder(new EmptyBorder(20, 20, 20, 20));
 		addSquarePanels();
+		addTextFields();
 	}
 
 	private void addSquarePanels() {
@@ -51,24 +54,32 @@ public class BoardPanel extends JPanel implements Observer {
 		}
 	}
 
-	private void addTextFields(int[][] state) {
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			addTextField(state, i);
+	private void addTextFields() {
+		for (int i = 0; i < rows; i++) {
+			addTextField(i);
 		}
 	}
 
-	private void addTextField(int[][] state, int i) {
-		for (int j = 0; j < BOARD_SIZE; j++) {
-			TextField textField = new TextField(i, j, state[i][j]);
+	private void addTextField(int i) {
+		for (int j = 0; j < cols; j++) {
+			TextField textField = new TextField(i, j, boardModel.getState()[i][j]);
 			textFields[i][j] = textField;
 			panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
 		}
 	}
 
 	private void updateTextfields(int[][] state) {
+//		for (JPanel[] panel : panels) {
+//			for (JPanel panel1 : panel) {
+//				panel1.removeAll();
+//			}
+//		}
+
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				textFields[i][j].setText(String.valueOf(state[i][j]));
+				TextField textField = new TextField(i, j, state[i][j]);
+				textFields[i][j] = textField;
+				panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
 			}
 		}
 	}
@@ -77,24 +88,32 @@ public class BoardPanel extends JPanel implements Observer {
 		return textFields;
 	}
 
+	public void setBoardController(BoardController boardController) {
+		this.boardController = boardController;
+	}
+
 	@Override
 	public void update(Object state) {
 //		System.out.println(boardModel);
 		int[][] arr = (int[][]) state;
+
+		if (gameOver) return;
 
 		if (SudokuValidator.isSolved(arr)) {
 			JOptionPane.showMessageDialog(this,
 										  "Congratulations! You have completed the board.",
 										  "Winner",
 										   JOptionPane.INFORMATION_MESSAGE);
+//			boardController.pushRoute(USER_PANEL);
+			gameOver = true;
 			return;
 		}
-
-		if (initRound) {
-			addTextFields(arr);
-		} else {
-			updateTextfields(arr);
-		}
+		boardController.restartBoard();
+//		if (initRound) {
+//			addTextFields();
+//		} else {
+//			updateTextfields(arr);
+//		}
 	}
 
 }

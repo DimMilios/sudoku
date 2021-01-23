@@ -3,6 +3,7 @@ import controller.BoardController;
 import controller.UserController;
 import model.*;
 import view.MainView;
+import view.menu.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,8 +35,13 @@ public class Main {
 
 		userController = new UserController(mainView);
 		boardController = new BoardController(mainView, difficultyFactory, boardModel);
+
+		mainView.setJMenuBar(new MenuBar(mainView, boardController));
+
+
 		mainView.getUserPanel().setUserController(userController);
 		mainView.getUserPanel().setBoardController(boardController);
+		mainView.getGamePanel().getBoardPanel().setBoardController(boardController);
 	}
 
 	public static void main(String[] args) {

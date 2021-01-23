@@ -1,5 +1,6 @@
 package view.menu;
 
+import controller.BoardController;
 import view.MainView;
 
 import javax.swing.*;
@@ -12,16 +13,18 @@ public class MenuBar extends JMenuBar {
     private JMenu options;
     private JMenu help;
     private MainView mainView;
+    private BoardController boardController;
 
-    public MenuBar(MainView mainView) {
+    public MenuBar(MainView mainView, BoardController boardController) {
         this.mainView = mainView;
+        this.boardController = boardController;
         initComponents();
     }
 
     private void initComponents() {
-        game = MenuFactory.createMenu(GAME_MENU);
-        options = MenuFactory.createMenu(OPTIONS_MENU);
-        help = MenuFactory.createMenu(HELP_MENU);
+        game = MenuFactory.createMenu(GAME_MENU, boardController);
+        options = MenuFactory.createMenu(OPTIONS_MENU, boardController);
+        help = MenuFactory.createMenu(HELP_MENU, boardController);
 
         this.add(game);
         this.add(options);

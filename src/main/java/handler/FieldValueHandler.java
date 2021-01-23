@@ -2,9 +2,9 @@ package handler;
 
 import controller.BoardController;
 import model.BoardModel;
-import view.DisabledFieldState;
+import view.game.DisabledFieldState;
 import view.MainView;
-import view.TextField;
+import view.game.TextField;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -47,19 +47,19 @@ public class FieldValueHandler implements KeyListener {
 		if (keyIsNumeric(keyCode)) {
 			writeNumberValue(e, keyCode);
 		}
-		else {
-			moveWithArrowKeys(keyCode);
-		}
+//		else {
+//			moveWithArrowKeys(keyCode);
+//		}
 	}
 
 	private void writeNumberValue(KeyEvent e, int keyCode) {
 //		if (!textField.isEditable()) return;
 //		System.out.println(textField.getFieldState().getClass());
-		if (!(textField.getFieldState() instanceof DisabledFieldState)) {
+//		if (!(textField.getFieldState() instanceof DisabledFieldState)) {
 			// Replace textField text when pressing keys 1-9 or numpad 1-9
 			int keyValue = Character.getNumericValue(e.getKeyChar());
 			boardController.updateField(textField, keyValue);
-		}
+//		}
 
 
 //		textField.setText(String.valueOf(keyValue));

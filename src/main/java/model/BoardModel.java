@@ -67,10 +67,22 @@ public class BoardModel extends Model {
     public String toString() {
         return "BoardModel{" +
                 "difficulty='" + difficulty + '\'' +
-                ", state=" + Arrays.deepToString(state)  +
+                ", state=" + printState(state)  +
                 ", currentTurn=" + currentTurn +
                 ", id=" + id +
                 "}\n";
+    }
+
+    public String printState(int[][] state) {
+        String result = "";
+        for (int i = 0; i < state.length; i++) {
+            result += "[";
+            for (int j = 0; j < state[i].length; j++) {
+                result = result.concat(state[i][j] + " ");
+            }
+            result += "]\n";
+        }
+        return result;
     }
 
     @Override

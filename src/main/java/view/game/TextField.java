@@ -1,4 +1,4 @@
-package view;
+package view.game;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;

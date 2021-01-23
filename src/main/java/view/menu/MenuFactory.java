@@ -1,15 +1,17 @@
 package view.menu;
 
+import controller.BoardController;
+
 import javax.swing.*;
 
 import static model.SudokuConstants.*;
 
 public class MenuFactory {
 
-    public static JMenu createMenu(String name) {
+    public static JMenu createMenu(String name, BoardController boardController) {
         switch (name) {
             case GAME_MENU:
-                return new GameMenu(name);
+                return new GameMenu(name, boardController);
             case OPTIONS_MENU:
                 return new OptionsMenu(name);
             case HELP_MENU:

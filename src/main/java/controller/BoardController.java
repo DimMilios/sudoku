@@ -2,13 +2,9 @@ package controller;
 
 import handler.FieldValueHandler;
 import model.*;
-import view.DefaultFieldState;
-import view.IncorrectFieldState;
+import view.game.*;
 import view.MainView;
-import view.TextField;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyListener;
 
 public class BoardController {
@@ -17,6 +13,7 @@ public class BoardController {
 	private final DifficultyFactory difficultyFactory;
 	private final BoardModel boardModel;
 	private KeyListener fieldValueHandler;
+	private String boardDifficulty;
 
 	public BoardController(MainView mainView,
 						   DifficultyFactory difficultyFactory,
@@ -27,10 +24,30 @@ public class BoardController {
 		this.fieldValueHandler = new FieldValueHandler(boardModel, mainView, this);
 	}
 
-	public void initializeBoard(String difficulty) {
-		update(difficulty);
+	public void initializeBoard() {
+		GamePanel gamePanel = mainView.getGamePanel();
 		addFieldListeners(fieldValueHandler);
 		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
+		gamePanel.revalidate();
+		gamePanel.repaint();
+	}
+
+	public void initializeBoard(String difficulty) {
+		update(difficulty);
+		this.boardDifficulty = difficulty;
+		addFieldListeners(fieldValueHandler);
+		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
+	}
+
+	public void update(String difficulty) {
+		boardModel.setDifficulty(difficulty);
+		boardModel.setState(generateBoard(difficulty));
+	}
+
+	private int[][] generateBoard(String difficulty) {
+		sudokuGenerator.initWithMissingDigits(
+				difficultyFactory.getDifficultyStrategy(difficulty).getDifficulty());
+		return sudokuGenerator.getGeneratedBoard();
 	}
 
 	public void addFieldListeners(KeyListener listener) {
@@ -42,22 +59,33 @@ public class BoardController {
 		}
 	}
 
-	private int[][] generateBoard(String difficulty) {
-		sudokuGenerator.initWithMissingDigits(
-				difficultyFactory.getDifficultyStrategy(difficulty).getDifficulty());
-		return sudokuGenerator.getGeneratedBoard();
+	public void startNewGame() {
+		BoardPanel boardPanel = mainView.getGamePanel().getBoardPanel();
+		boardPanel.removeAll();
+		initializeBoard(boardDifficulty);
+		boardPanel.setup();
+		addFieldListeners(fieldValueHandler);
+		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
+		boardPanel.revalidate();
+		boardPanel.repaint();
 	}
 
-	public void update(String difficulty) {
-//		System.out.println(boardModel.toString());
-		boardModel.setDifficulty(difficulty);
-		boardModel.setState(generateBoard(difficulty));
-//		System.out.println(boardModel.toString());
+	public void restartBoard() {
+		BoardPanel boardPanel = mainView.getGamePanel().getBoardPanel();
+		boardPanel.removeAll();
+		boardPanel.setup();
+		addFieldListeners(fieldValueHandler);
+		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
+		boardPanel.revalidate();
+		boardPanel.repaint();
 	}
+
 
 	public void updateField(int gridX, int gridY, int keyValue) {
 //		System.out.println(boardModel.getState()[gridX][gridY]);
+		System.out.println(boardModel.printState(boardModel.getState()));
 		boardModel.setField(gridX, gridY, keyValue);
+		System.out.println(boardModel.printState(boardModel.getState()));
 //		System.out.println(boardModel.getState()[gridX][gridY]);
 	}
 
@@ -76,5 +104,10 @@ public class BoardController {
 			textField.setFieldState(fieldState);
 			updateField(textField.getGridX(), textField.getGridY(), keyValue);
 		}
+	}
+
+	public void pushRoute(String route) {
+		mainView.getCardLayout()
+				.show(mainView.getCardsContainer(), route);
 	}
 }

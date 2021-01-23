@@ -1,4 +1,4 @@
-package view;
+package view.game;
 
 import java.awt.*;
 
@@ -10,7 +10,7 @@ public class DisabledFieldState extends FieldState {
 
 	@Override
 	public void update() {
-//		super.textField.setEnabled(false);
+		super.textField.setEnabled(false);
 		super.textField.setEditable(false);
 		super.textField.setOpaque(true);
 		super.textField.setBackground(new Color(255, 255, 255));

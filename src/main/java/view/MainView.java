@@ -1,8 +1,7 @@
 package view;
 
-import controller.UserController;
-import handler.FieldValueHandler;
 import model.BoardModel;
+import view.game.GamePanel;
 import view.menu.MenuBar;
 
 import javax.swing.*;
@@ -32,8 +31,6 @@ public class MainView extends JFrame {
     private void initComponents() {
         cardLayout = new CardLayout();
         cardsContainer = new JPanel(cardLayout);
-
-        this.setJMenuBar(new MenuBar(this));
 
         this.userPanel = new UserPanel();
         this.gamePanel = new GamePanel(boardModel);

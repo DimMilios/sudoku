@@ -1,7 +1,8 @@
-package view;
+package view.game;
 
-import handler.LabelResizeHandler;
 import model.BoardModel;
+import view.DifficultyLabel;
+import view.UsernameLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,10 +20,10 @@ public class GamePanel extends JPanel {
 
 	public GamePanel(BoardModel boardModel) {
 		this.boardModel = boardModel;
-		this.init();
+		this.setup();
 	}
 
-	private void init() {
+	public void setup() {
 		this.setLayout(new BorderLayout());
 		initHeader();
 		this.usernameLabel = new UsernameLabel();
@@ -30,8 +31,6 @@ public class GamePanel extends JPanel {
 
 		this.boardPanel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
 		this.add(boardPanel, BorderLayout.CENTER);
-
-//		this.addComponentListener(new LabelResizeHandler(usernameLabel));
 
 		JPanel info = new JPanel(new BorderLayout());
 		info.add(usernameLabel, BorderLayout.WEST);
