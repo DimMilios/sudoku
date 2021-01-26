@@ -1,6 +1,7 @@
 package view;
 
 import model.BoardModel;
+import model.SudokuConstants;
 import view.game.GamePanel;
 import view.menu.MenuBar;
 
@@ -33,11 +34,12 @@ public class MainView extends JFrame {
         cardsContainer = new JPanel(cardLayout);
 
         this.userPanel = new UserPanel();
-        this.gamePanel = new GamePanel(boardModel);
         this.historyPanel = new HistoryPanel();
 
-        cardsContainer.add(userPanel, USER_PANEL);
+        this.gamePanel = new GamePanel(boardModel);
         cardsContainer.add(gamePanel, GAME_PANEL);
+
+        cardsContainer.add(userPanel, USER_PANEL);
         cardsContainer.add(historyPanel, HISTORY_PANEL);
 
         cardLayout.show(cardsContainer, USER_PANEL);

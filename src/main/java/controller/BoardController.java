@@ -9,6 +9,8 @@ import view.MainView;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 
+import static model.SudokuConstants.*;
+
 public class BoardController {
 	private final MainView mainView;
 	private final SudokuGenerator sudokuGenerator = SudokuGenerator.getInstance();
@@ -28,14 +30,16 @@ public class BoardController {
 
 	public void initializeBoard(String difficulty) {
 		update(difficulty);
+		BoardPanel panel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
+		this.mainView.getGamePanel().setBoardPanel(panel);
+		addFieldListeners(fieldValueHandler);
+		this.mainView.getCardLayout().show(mainView.getCardsContainer(), GAME_PANEL);
 		this.boardDifficulty = difficulty;
 	}
 
 	private void update(String difficulty) {
 		BoardModelItem item = new BoardModelItem(difficulty, generateBoard(difficulty));
 		boardModel.add(item);
-//		boardModel.setDifficulty(difficulty);
-//		boardModel.setState(generateBoard(difficulty));
 	}
 
 	private int[][] generateBoard(String difficulty) {
@@ -54,53 +58,30 @@ public class BoardController {
 	}
 
 	public void startNewGame() {
-		BoardPanel boardPanel = mainView.getGamePanel().getBoardPanel();
-		boardPanel.removeAll();
+		GamePanel boardPanel = mainView.getGamePanel();
+		boardPanel.remove(mainView.getGamePanel().getBoardPanel());
 		boardModel.clear();
 		initializeBoard(boardDifficulty);
-		boardPanel.setup(boardModel.last());
-		addFieldListeners(fieldValueHandler);
-		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
-		boardPanel.revalidate();
-		boardPanel.repaint();
 	}
 
+//	}
 	public void restartBoard() {
 		BoardPanel boardPanel = mainView.getGamePanel().getBoardPanel();
 		boardPanel.removeAll();
 //		System.out.println("Snapshots:\n" + boardModel.getSnapshots());
-		System.out.println("==========First:\n" + boardModel.first() + "\n============");
-		System.out.println("==========Last:\n" + boardModel.last() + "\n============");
+//		System.out.println("==========First:\n" + boardModel.first() + "\n============");
+//		System.out.println("==========Last:\n" + boardModel.last() + "\n============");
 		boardPanel.setup(boardModel.first());
-//		boardPanel.setup(sudokuGenerator.getGeneratedBoard());
 		addFieldListeners(fieldValueHandler);
-		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
+		mainView.getCardLayout().show(mainView.getCardsContainer(), GAME_PANEL);
 		boardPanel.revalidate();
 		boardPanel.repaint();
 	}
 
-//	public void restartBoard(BoardModelItem item) {
-//		BoardPanel boardPanel = mainView.getGamePanel().getBoardPanel();
-//		boardPanel.removeAll();
-//		System.out.println("=======================Snapshots:\n" + boardModel.getSnapshots()
-//		+ "\n=============================");
-//		boardPanel.setup(item);
-//		addFieldListeners(fieldValueHandler);
-//		mainView.getCardLayout().show(mainView.getCardsContainer(), SudokuConstants.GAME_PANEL);
-//		boardPanel.revalidate();
-//		boardPanel.repaint();
-//	}
-
-	public void updateField(int gridX, int gridY, int keyValue) {
-//		System.out.println(boardModel.printState(boardModel.getState()));
-		BoardModelItem lastItem = boardModel.last();
-//		boardModel.setField(gridX, gridY, keyValue);
-
-//		System.out.println(boardModel.printState(boardModel.getState()));
-	}
-
 	public void updateField(TextField textField, int keyValue) {
-		BoardModelItem lastItem = boardModel.last();
+//		BoardModelItem lastItem = boardModel.last();
+		BoardModelItem lastItem = mainView.getGamePanel().getBoardPanel().getCurrentModelItem();
+//		System.out.println("Last Item========\n\n" + lastItem);
 		textField.setText(String.valueOf(keyValue));
 
 		int gridX = textField.getGridX();
@@ -120,26 +101,12 @@ public class BoardController {
 				newState[i] = Arrays.copyOf(lastItemState[i], lastItemState[i].length);
 			}
 			newState[gridX][gridY] = keyValue;
-			boardModel.add(new BoardModelItem(lastItem.getDifficulty(), newState));
+			BoardModelItem item = new BoardModelItem(lastItem.getDifficulty(), newState);
+			boardModel.add(item);
+			mainView.getGamePanel().getBoardPanel().setCurrentModelItem(item);
+//			System.out.println("After Update========\n\n" + item);
 		}
 	}
-
-//	public void updateField(TextField textField, int keyValue) {
-//		textField.setText(String.valueOf(keyValue));
-//
-//		int gridX = textField.getGridX();
-//		int gridY = textField.getGridY();
-//
-//		if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
-//			IncorrectFieldState fieldState = new IncorrectFieldState(textField);
-//			textField.setFieldState(fieldState);
-//		}
-//		else {
-//			DefaultFieldState fieldState = new DefaultFieldState(textField);
-//			textField.setFieldState(fieldState);
-//			updateField(textField.getGridX(), textField.getGridY(), keyValue);
-//		}
-//	}
 
 	public void pushRoute(String route) {
 		mainView.getCardLayout()

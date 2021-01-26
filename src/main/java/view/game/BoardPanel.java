@@ -21,7 +21,6 @@ public class BoardPanel extends JPanel implements Observer {
 	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
 	private TextField[][] textFields;
 	private boolean gameOver;
-	private boolean isInitRound = true;
 	private BoardController boardController;
 	private BoardModelItem currentModelItem;
 
@@ -32,18 +31,17 @@ public class BoardPanel extends JPanel implements Observer {
 		this.cols = cols;
 		this.boardModel = boardModel;
 		this.boardModel.subscribe(this);
-//		setup();
+		setup(boardModel.first());
 	}
 
 	public void setup(BoardModelItem item) {
 		this.textFields = new TextField[rows][cols];
 		this.gameOver = false;
-//		this.isInitRound = true;
 		this.setLayout(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
 		this.setBorder(new EmptyBorder(20, 20, 20, 20));
 		this.currentModelItem = item;
 		addSquarePanels();
-		addTextFields(item);
+		addTextFields();
 	}
 
 	private void addSquarePanels() {
@@ -59,33 +57,17 @@ public class BoardPanel extends JPanel implements Observer {
 		}
 	}
 
-	private void addTextFields(BoardModelItem item) {
+	private void addTextFields() {
 		for (int i = 0; i < rows; i++) {
-			addTextField(item, i);
+			addTextField(i);
 		}
 	}
 
-	private void addTextField(BoardModelItem item, int i) {
+	private void addTextField(int i) {
 		for (int j = 0; j < cols; j++) {
 			TextField textField = new TextField(i, j, currentModelItem.getState()[i][j]);
 			textFields[i][j] = textField;
 			panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
-		}
-	}
-
-	private void updateTextfields(int[][] state) {
-//		for (JPanel[] panel : panels) {
-//			for (JPanel panel1 : panel) {
-//				panel1.removeAll();
-//			}
-//		}
-
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				TextField textField = new TextField(i, j, state[i][j]);
-				textFields[i][j] = textField;
-				panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
-			}
 		}
 	}
 
@@ -97,17 +79,24 @@ public class BoardPanel extends JPanel implements Observer {
 		this.boardController = boardController;
 	}
 
+	public BoardModelItem getCurrentModelItem() {
+		return currentModelItem;
+	}
+
+	public void setCurrentModelItem(BoardModelItem currentModelItem) {
+		this.currentModelItem = currentModelItem;
+	}
+
 	@Override
 	public void update(Object state) {
-//		System.out.println(boardModel);
-//		java.util.List<BoardModelItem> item = (java.util.List<BoardModelItem>) state;
-//		BoardModelItem item = (BoardModelItem) state;
+		currentModelItem = (BoardModelItem) state;
+		System.out.println("Updated value=================\n" + currentModelItem);
 
 		if (gameOver) return;
 
-		if (currentModelItem == null) {
-			currentModelItem = (BoardModelItem) state;
-		}
+//		if (currentModelItem == null) {
+//			currentModelItem = (BoardModelItem) state;
+//		}
 
 		if (SudokuValidator.isSolved(currentModelItem.getState())) {
 			JOptionPane.showMessageDialog(this,
@@ -118,18 +107,7 @@ public class BoardPanel extends JPanel implements Observer {
 			gameOver = true;
 			return;
 		}
-		else {
-			boardController.restartBoard();
-////			boardController.restartBoard(item.get(item.size() - 1));
-		}
-//		if (isInitRound) {
-//			boardController.restartBoard();
-//			isInitRound = false;
-//////			addTextFields();
-//		}
-//		else {
-//			updateTextfields(arr);
-//		}
+
 	}
 
 }

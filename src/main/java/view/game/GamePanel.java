@@ -7,8 +7,6 @@ import view.UsernameLabel;
 import javax.swing.*;
 import java.awt.*;
 
-import static model.SudokuConstants.*;
-
 public class GamePanel extends JPanel {
 
 	private JLabel headerLabel;
@@ -29,13 +27,20 @@ public class GamePanel extends JPanel {
 		this.usernameLabel = new UsernameLabel();
 		this.difficultyLabel = new DifficultyLabel(boardModel);
 
-		this.boardPanel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
-		this.add(boardPanel, BorderLayout.CENTER);
+//		this.boardPanel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
+//		this.add(boardPanel, BorderLayout.CENTER);
 
 		JPanel info = new JPanel(new BorderLayout());
 		info.add(usernameLabel, BorderLayout.WEST);
 		info.add(difficultyLabel, BorderLayout.EAST);
 		this.add(info, BorderLayout.SOUTH);
+	}
+
+	public void setBoardPanel(BoardPanel boardPanel) {
+		this.boardPanel = boardPanel;
+		this.add(boardPanel, BorderLayout.CENTER);
+		this.revalidate();
+		this.repaint();
 	}
 
 	public BoardPanel getBoardPanel() {
