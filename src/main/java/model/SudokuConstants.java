@@ -5,7 +5,7 @@ public class SudokuConstants {
 	public final static String NORMAL = "Normal";
 	public final static String HARD = "Hard";
 //	public static final int EASY_MISSING_DIGITS = 43;
-	public static final int EASY_MISSING_DIGITS = 2;
+	public static final int EASY_MISSING_DIGITS = 5;
 	public static final int NORMAL_MISSING_DIGITS = 51;
 	public static final int HARD_MISSING_DIGITS = 56;
 

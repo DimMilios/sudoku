@@ -2,7 +2,6 @@ package view.game;
 
 import controller.BoardController;
 import handler.FieldValueHandler;
-import handler.TimeLabelHandler;
 import model.BoardModel;
 import model.BoardModel.BoardModelItem;
 import model.SudokuValidator;
@@ -12,7 +11,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyListener;
-import java.time.LocalDateTime;
 
 import static model.SudokuConstants.*;
 
@@ -28,7 +26,6 @@ public class BoardPanel extends JPanel implements Observer {
 	private BoardController boardController;
 	private FieldValueHandler fieldHandler;
 	private BoardModelItem currentModelItem;
-	private Timer timer;
 
 	public BoardPanel(int rows,
 					  int cols,
@@ -111,30 +108,46 @@ public class BoardPanel extends JPanel implements Observer {
 
 		if (gameOver) return;
 
-//		if (currentModelItem == null) {
-//			currentModelItem = (BoardModelItem) state;
-//		}
 
 		if (SudokuValidator.isSolved(currentModelItem.getState())) {
 			stopTimer();
-			JOptionPane.showMessageDialog(this,
-										  "Congratulations! You have completed the board.",
-										  "Winner",
-										  JOptionPane.INFORMATION_MESSAGE);
-//			boardController.pushRoute(USER_PANEL);
 			gameOver = true;
-			return;
+			int option = getOption();
+			performOptionAction(option);
 		}
+
+	}
+
+	private void performOptionAction(int option) {
+		switch (option) {
+			case 0:
+				boardController.startNewGame();
+				break;
+			case 1:
+				boardController.restartBoard();
+				break;
+		}
+	}
+
+	private int getOption() {
+		Object[] options = {"New Game", "Restart", "Cancel"};
+
+		return JOptionPane.showOptionDialog(null,
+											"Congratulations! You have completed the board.",
+											"Winner",
+											JOptionPane.YES_NO_OPTION,
+											JOptionPane.INFORMATION_MESSAGE,
+											null,
+											options,
+											options[2]);
 	}
 
 	private void stopTimer() {
 		Container innerGamePanel = SwingUtilities.getAncestorOfClass(InnerGamePanel.class, this);
-
 		if (innerGamePanel instanceof InnerGamePanel) {
 			InnerGamePanel panel = (InnerGamePanel) innerGamePanel;
 			Timer timer = panel.getTimer();
 			timer.stop();
-			System.out.println("timer stopped");
 		}
 	}
 

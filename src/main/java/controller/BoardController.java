@@ -49,14 +49,16 @@ public class BoardController {
 
 	public void startNewGame() {
 		GamePanel gamePanel = mainView.getGamePanel();
-		gamePanel.remove(mainView.getGamePanel().getInnerGamePanel());
+		gamePanel.remove(gamePanel.getInnerGamePanel());
 		boardModel.clear();
+		boardModel.unsubscribe(gamePanel.getInnerGamePanel().getBoardPanel());
 		initializeBoard(boardDifficulty);
 	}
 
 	public void restartBoard() {
 		GamePanel gamePanel = mainView.getGamePanel();
-		gamePanel.remove(mainView.getGamePanel().getInnerGamePanel());
+		gamePanel.remove(gamePanel.getInnerGamePanel());
+		boardModel.unsubscribe(gamePanel.getInnerGamePanel().getBoardPanel());
 		BoardPanel panel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
 		panel.setBoardController(this);
 		InnerGamePanel innerGamePanel = new InnerGamePanel(panel);
