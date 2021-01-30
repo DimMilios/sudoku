@@ -1,6 +1,5 @@
 package controller;
 
-import dao.Dao;
 import model.UserModel;
 import view.MainView;
 
@@ -8,7 +7,7 @@ import javax.swing.*;
 
 public class UserController {
 //    private Dao<UserModel> userDao;
-    private MainView mainView;
+    private final MainView mainView;
 
     public UserController(MainView mainView) {
         this.mainView = mainView;

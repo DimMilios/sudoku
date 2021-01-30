@@ -16,7 +16,7 @@ public class GamePanel extends JPanel {
 	private BoardPanel boardPanel;
 	private InnerGamePanel innerGamePanel;
 
-	private BoardModel boardModel;
+	private final BoardModel boardModel;
 
 	public GamePanel(BoardModel boardModel) {
 		this.boardModel = boardModel;

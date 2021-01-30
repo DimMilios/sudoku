@@ -14,7 +14,7 @@ public class GameMenu extends JMenu {
     private JMenuItem newGame;
     private JMenuItem restart;
     private JMenuItem exit;
-    private BoardController boardController;
+    private final BoardController boardController;
 
     public GameMenu(String name, BoardController boardController) {
         super(name);

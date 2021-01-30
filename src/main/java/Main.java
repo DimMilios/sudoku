@@ -8,8 +8,6 @@ import view.menu.MenuBar;
 import javax.swing.*;
 import java.awt.*;
 
-import static model.SudokuConstants.*;
-
 public class Main {
 
 	BoardController boardController;

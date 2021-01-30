@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InMemoryUserDaoImpl implements Dao<UserModel> {
 
-    private List<UserModel> inMemoryUserDb;
+    private final List<UserModel> inMemoryUserDb;
 
     public InMemoryUserDaoImpl() {
         inMemoryUserDb = new ArrayList<>();

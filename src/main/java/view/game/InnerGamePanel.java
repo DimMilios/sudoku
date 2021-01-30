@@ -11,7 +11,7 @@ import static model.BoardModel.*;
 
 public class InnerGamePanel extends JPanel {
 
-	private BoardPanel boardPanel;
+	private final BoardPanel boardPanel;
 	private JLabel timeLabel;
 	private Timer timer;
 

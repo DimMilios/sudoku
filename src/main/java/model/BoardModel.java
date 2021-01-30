@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardModel extends Model {
-    private List<BoardModelItem> snapshots = new ArrayList<>();
+    private final List<BoardModelItem> snapshots = new ArrayList<>();
 
     public BoardModel() {
         super(new ArrayList<>());

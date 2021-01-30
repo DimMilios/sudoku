@@ -2,11 +2,9 @@ package view;
 
 import controller.BoardController;
 import controller.UserController;
+import handler.StartButtonHandler;
 
 import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static model.SudokuConstants.*;
 
@@ -46,15 +44,7 @@ public class UserPanel extends JPanel {
         difficultyGroup.add(hard);
 
         startButton = new JButton("Start");
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String difficulty = difficultyGroup.getSelection().getActionCommand();
-                String username = nameField.getText();
-                userController.update(username);
-                boardController.initializeBoard(difficulty);
-            }
-        });
+        startButton.addActionListener(new StartButtonHandler(this));
 
         this.add(nameLabel);
         this.add(nameField);
@@ -69,12 +59,16 @@ public class UserPanel extends JPanel {
         return nameField;
     }
 
-    public JButton getStartButton() {
-        return startButton;
-    }
-
     public ButtonGroup getDifficultyGroup() {
         return difficultyGroup;
+    }
+
+    public UserController getUserController() {
+        return userController;
+    }
+
+    public BoardController getBoardController() {
+        return boardController;
     }
 
     public void setUserController(UserController userController) {

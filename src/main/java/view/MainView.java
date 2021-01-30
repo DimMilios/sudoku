@@ -1,9 +1,7 @@
 package view;
 
 import model.BoardModel;
-import model.SudokuConstants;
 import view.game.GamePanel;
-import view.menu.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +13,7 @@ public class MainView extends JFrame {
     public final static int WIDTH = 800;
     public final static int HEIGHT = 600;
 
-    private BoardModel boardModel;
+    private final BoardModel boardModel;
     private CardLayout cardLayout;
     private JPanel cardsContainer;
 

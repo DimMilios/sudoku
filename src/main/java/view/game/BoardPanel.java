@@ -19,8 +19,8 @@ public class BoardPanel extends JPanel implements Observer {
 	private final int rows;
 	private final int cols;
 
-	private BoardModel boardModel;
-	private JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
+	private final BoardModel boardModel;
+	private final JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
 	private TextField[][] textFields;
 	private boolean gameOver;
 	private BoardController boardController;

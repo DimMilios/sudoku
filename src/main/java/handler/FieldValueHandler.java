@@ -3,7 +3,6 @@ package handler;
 import controller.BoardController;
 import model.BoardModel;
 import view.game.BoardPanel;
-import view.MainView;
 import view.game.TextField;
 
 import java.awt.event.KeyEvent;
@@ -11,9 +10,9 @@ import java.awt.event.KeyListener;
 
 public class FieldValueHandler implements KeyListener {
 
-	private BoardModel boardModel;
-	private BoardPanel boardPanel;
-	private BoardController boardController;
+	private final BoardModel boardModel;
+	private final BoardPanel boardPanel;
+	private final BoardController boardController;
 
 	private TextField textField;
 
@@ -42,8 +41,6 @@ public class FieldValueHandler implements KeyListener {
 		}
 
 		int keyCode = e.getKeyCode();
-
-
 		if (keyIsNumeric(keyCode)) {
 			writeNumberValue(e);
 		}

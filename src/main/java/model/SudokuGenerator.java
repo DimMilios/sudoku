@@ -7,7 +7,7 @@ public class SudokuGenerator
     private int[][] generatedBoard;
     private int[][] solvedCopy;
 
-    private int size = 9; // number of columns/rows.
+    private final int size = 9; // number of columns/rows.
     private int sizeSqrt; // square root of N
     private int missingDigits = 40; // No. Of missing digits
 

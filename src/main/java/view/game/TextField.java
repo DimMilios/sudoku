@@ -1,7 +1,5 @@
 package view.game;
 
-import model.SudokuConstants;
-
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;

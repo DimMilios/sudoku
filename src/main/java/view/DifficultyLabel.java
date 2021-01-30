@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class DifficultyLabel extends JLabel implements Observer {
 
-	private BoardModel boardModel;
+	private final BoardModel boardModel;
 
 	public DifficultyLabel(BoardModel boardModel) {
 		this.boardModel = boardModel;

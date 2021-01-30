@@ -6,11 +6,10 @@ import java.awt.event.ActionListener;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 
 public class TimeLabelHandler implements ActionListener {
-	private LocalDateTime date;
-	private JLabel timeLabel;
+	private final LocalDateTime date;
+	private final JLabel timeLabel;
 
 	public TimeLabelHandler(LocalDateTime date, JLabel timeLabel) {
 		this.date = date;

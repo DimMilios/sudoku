@@ -12,8 +12,8 @@ public class MenuBar extends JMenuBar {
     private JMenu game;
     private JMenu options;
     private JMenu help;
-    private MainView mainView;
-    private BoardController boardController;
+    private final MainView mainView;
+    private final BoardController boardController;
 
     public MenuBar(MainView mainView, BoardController boardController) {
         this.mainView = mainView;
