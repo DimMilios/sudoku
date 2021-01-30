@@ -1,9 +1,13 @@
 package view.game;
 
+import model.SudokuConstants;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.text.ParseException;
+
+import static model.SudokuConstants.*;
 
 public class TextField extends JFormattedTextField {
 
@@ -43,10 +47,10 @@ public class TextField extends JFormattedTextField {
 
 	private void initState(int value) {
 		if (value >= 1 && value <= 9) {
-			this.fieldState = new DisabledFieldState(this);
+			this.fieldState = FieldStateFactory.create(DISABLED_STATE, this);
 			this.setText(String.valueOf(value));
 		} else {
-		  this.fieldState = new DefaultFieldState(this);
+		  this.fieldState = FieldStateFactory.create(DEFAULT_STATE, this);
 		}
 	}
 

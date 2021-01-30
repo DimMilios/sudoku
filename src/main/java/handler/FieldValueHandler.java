@@ -45,37 +45,22 @@ public class FieldValueHandler implements KeyListener {
 
 
 		if (keyIsNumeric(keyCode)) {
-			writeNumberValue(e, keyCode);
+			writeNumberValue(e);
 		}
-//		else {
-//			moveWithArrowKeys(keyCode);
-//		}
+		else {
+			moveWithArrowKeys(keyCode);
+		}
 	}
 
-	private void writeNumberValue(KeyEvent e, int keyCode) {
-//		if (!textField.isEditable()) return;
-//		System.out.println(textField.getFieldState().getClass());
-//		if (!(textField.getFieldState() instanceof DisabledFieldState)) {
-			// Replace textField text when pressing keys 1-9 or numpad 1-9
-			int keyValue = Character.getNumericValue(e.getKeyChar());
-			boardController.updateField(textField, keyValue);
-//		}
+	private void writeNumberValue(KeyEvent e) {
+		if (!textField.isEditable()) return;
 
+		int keyValue = Character.getNumericValue(e.getKeyChar());
+		BoardModel.BoardModelItem currentModelItem = mainView.getGamePanel()
+															 .getBoardPanel()
+															 .getCurrentModelItem();
+		boardController.updateField(textField, keyValue, currentModelItem);
 
-//		textField.setText(String.valueOf(keyValue));
-//
-//		int gridX = textField.getGridX();
-//		int gridY = textField.getGridY();
-//
-//		if (!SudokuValidator.isSafe(boardModel.getState(), gridX, gridY, keyValue)) {
-//			textField.setBorder(
-//					BorderFactory.createLineBorder(new Color(200, 20, 20), 3));
-//		} else {
-//			textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
-//					"TextField.border"));
-//
-////			boardController.updateField(gridX, gridY, keyValue);
-//		}
 	}
 
 	private void moveWithArrowKeys(int keyCode) {

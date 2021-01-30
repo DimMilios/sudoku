@@ -1,6 +1,7 @@
 package view.game;
 
 import controller.BoardController;
+import handler.TimeLabelHandler;
 import model.BoardModel;
 import model.BoardModel.BoardModelItem;
 import model.SudokuValidator;
@@ -9,6 +10,7 @@ import observer.Observer;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.time.LocalDateTime;
 
 import static model.SudokuConstants.*;
 
@@ -40,6 +42,18 @@ public class BoardPanel extends JPanel implements Observer {
 		this.setLayout(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
 		this.setBorder(new EmptyBorder(20, 20, 20, 20));
 		this.currentModelItem = item;
+
+		JLabel timeLabel = new JLabel();
+		timeLabel.setFont(new Font("Arial", Font.BOLD, 26));
+		timeLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		this.add(timeLabel);
+
+		LocalDateTime date = LocalDateTime.now();
+		TimeLabelHandler timeLabelHandler = new TimeLabelHandler(date, timeLabel);
+		Timer timer = new Timer(1000, timeLabelHandler);
+
+		timer.start();
+
 		addSquarePanels();
 		addTextFields();
 	}

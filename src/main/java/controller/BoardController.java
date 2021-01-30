@@ -78,33 +78,26 @@ public class BoardController {
 		boardPanel.repaint();
 	}
 
-	public void updateField(TextField textField, int keyValue) {
-//		BoardModelItem lastItem = boardModel.last();
-		BoardModelItem lastItem = mainView.getGamePanel().getBoardPanel().getCurrentModelItem();
-//		System.out.println("Last Item========\n\n" + lastItem);
+	public void updateField(TextField textField, int keyValue, BoardModelItem currentItem) {
 		textField.setText(String.valueOf(keyValue));
 
 		int gridX = textField.getGridX();
 		int gridY = textField.getGridY();
 
-		int[][] lastItemState = lastItem.getState();
+		int[][] currentItemState = currentItem.getState();
 
-		if (!SudokuValidator.isSafe(lastItemState, gridX, gridY, keyValue)) {
-			IncorrectFieldState fieldState = new IncorrectFieldState(textField);
-			textField.setFieldState(fieldState);
+		if (!SudokuValidator.isSafe(currentItemState, gridX, gridY, keyValue)) {
+			textField.setFieldState(FieldStateFactory.create(INCORRECT_STATE, textField));
 		}
 		else {
-			DefaultFieldState fieldState = new DefaultFieldState(textField);
-			textField.setFieldState(fieldState);
+			textField.setFieldState(FieldStateFactory.create(DEFAULT_STATE, textField));
 			int[][] newState = new int[9][9];
-			for (int i = 0; i < lastItemState.length; i++) {
-				newState[i] = Arrays.copyOf(lastItemState[i], lastItemState[i].length);
+			for (int i = 0; i < currentItemState.length; i++) {
+				newState[i] = Arrays.copyOf(currentItemState[i], currentItemState[i].length);
 			}
 			newState[gridX][gridY] = keyValue;
-			BoardModelItem item = new BoardModelItem(lastItem.getDifficulty(), newState);
+			BoardModelItem item = new BoardModelItem(currentItem.getDifficulty(), newState);
 			boardModel.add(item);
-			mainView.getGamePanel().getBoardPanel().setCurrentModelItem(item);
-//			System.out.println("After Update========\n\n" + item);
 		}
 	}
 
