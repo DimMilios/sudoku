@@ -2,7 +2,7 @@ package handler;
 
 import controller.BoardController;
 import model.BoardModel;
-import view.game.DisabledFieldState;
+import view.game.BoardPanel;
 import view.MainView;
 import view.game.TextField;
 
@@ -12,16 +12,16 @@ import java.awt.event.KeyListener;
 public class FieldValueHandler implements KeyListener {
 
 	private BoardModel boardModel;
-	private MainView mainView;
+	private BoardPanel boardPanel;
 	private BoardController boardController;
 
 	private TextField textField;
 
 	public FieldValueHandler(BoardModel boardModel,
-							 MainView mainView,
+							 BoardPanel boardPanel,
 							 BoardController boardController) {
 		this.boardModel = boardModel;
-		this.mainView = mainView;
+		this.boardPanel = boardPanel;
 		this.boardController = boardController;
 	}
 
@@ -56,11 +56,8 @@ public class FieldValueHandler implements KeyListener {
 		if (!textField.isEditable()) return;
 
 		int keyValue = Character.getNumericValue(e.getKeyChar());
-		BoardModel.BoardModelItem currentModelItem = mainView.getGamePanel()
-															 .getBoardPanel()
-															 .getCurrentModelItem();
+		BoardModel.BoardModelItem currentModelItem = boardPanel.getCurrentModelItem();
 		boardController.updateField(textField, keyValue, currentModelItem);
-
 	}
 
 	private void moveWithArrowKeys(int keyCode) {
@@ -96,7 +93,7 @@ public class FieldValueHandler implements KeyListener {
 		}
 
 		// Focus next field on arrow key move
-		TextField nextField = mainView.getGamePanel().getBoardPanel().getTextFields()[nextX][nextY];
+		TextField nextField = boardPanel.getTextFields()[nextX][nextY];
 		nextField.requestFocusInWindow();
 	}
 

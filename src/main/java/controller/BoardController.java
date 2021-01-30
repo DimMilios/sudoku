@@ -1,12 +1,10 @@
 package controller;
 
-import handler.FieldValueHandler;
 import model.*;
 import model.BoardModel.BoardModelItem;
 import view.game.*;
 import view.MainView;
 
-import java.awt.event.KeyListener;
 import java.util.Arrays;
 
 import static model.SudokuConstants.*;
@@ -16,7 +14,6 @@ public class BoardController {
 	private final SudokuGenerator sudokuGenerator = SudokuGenerator.getInstance();
 	private final DifficultyFactory difficultyFactory;
 	private final BoardModel boardModel;
-	private KeyListener fieldValueHandler;
 	private String boardDifficulty;
 
 	public BoardController(MainView mainView,
@@ -25,14 +22,16 @@ public class BoardController {
 		this.mainView = mainView;
 		this.difficultyFactory = difficultyFactory;
 		this.boardModel = boardModel;
-		this.fieldValueHandler = new FieldValueHandler(boardModel, mainView, this);
 	}
 
 	public void initializeBoard(String difficulty) {
 		update(difficulty);
 		BoardPanel panel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
-		this.mainView.getGamePanel().setBoardPanel(panel);
-		addFieldListeners(fieldValueHandler);
+		panel.setBoardController(this);
+		InnerGamePanel innerGamePanel = new InnerGamePanel(panel);
+		innerGamePanel.setup(boardModel.first());
+		this.mainView.getGamePanel().setInnerGamePanel(innerGamePanel);
+
 		this.mainView.getCardLayout().show(mainView.getCardsContainer(), GAME_PANEL);
 		this.boardDifficulty = difficulty;
 	}
@@ -48,34 +47,25 @@ public class BoardController {
 		return sudokuGenerator.getGeneratedBoard();
 	}
 
-	public void addFieldListeners(KeyListener listener) {
-		TextField[][] textFields = mainView.getGamePanel().getBoardPanel().getTextFields();
-		for (TextField[] fields : textFields) {
-			for (TextField field : fields) {
-				field.addKeyListener(listener);
-			}
-		}
-	}
-
 	public void startNewGame() {
-		GamePanel boardPanel = mainView.getGamePanel();
-		boardPanel.remove(mainView.getGamePanel().getBoardPanel());
+		GamePanel gamePanel = mainView.getGamePanel();
+		gamePanel.remove(mainView.getGamePanel().getInnerGamePanel());
 		boardModel.clear();
 		initializeBoard(boardDifficulty);
 	}
 
-//	}
 	public void restartBoard() {
-		BoardPanel boardPanel = mainView.getGamePanel().getBoardPanel();
-		boardPanel.removeAll();
-//		System.out.println("Snapshots:\n" + boardModel.getSnapshots());
-//		System.out.println("==========First:\n" + boardModel.first() + "\n============");
-//		System.out.println("==========Last:\n" + boardModel.last() + "\n============");
-		boardPanel.setup(boardModel.first());
-		addFieldListeners(fieldValueHandler);
+		GamePanel gamePanel = mainView.getGamePanel();
+		gamePanel.remove(mainView.getGamePanel().getInnerGamePanel());
+		BoardPanel panel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
+		panel.setBoardController(this);
+		InnerGamePanel innerGamePanel = new InnerGamePanel(panel);
+		gamePanel.setInnerGamePanel(innerGamePanel);
+
+		innerGamePanel.setup(boardModel.first());
 		mainView.getCardLayout().show(mainView.getCardsContainer(), GAME_PANEL);
-		boardPanel.revalidate();
-		boardPanel.repaint();
+		innerGamePanel.revalidate();
+		innerGamePanel.repaint();
 	}
 
 	public void updateField(TextField textField, int keyValue, BoardModelItem currentItem) {

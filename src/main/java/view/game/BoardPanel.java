@@ -1,6 +1,7 @@
 package view.game;
 
 import controller.BoardController;
+import handler.FieldValueHandler;
 import handler.TimeLabelHandler;
 import model.BoardModel;
 import model.BoardModel.BoardModelItem;
@@ -10,6 +11,7 @@ import observer.Observer;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.time.LocalDateTime;
 
 import static model.SudokuConstants.*;
@@ -24,7 +26,9 @@ public class BoardPanel extends JPanel implements Observer {
 	private TextField[][] textFields;
 	private boolean gameOver;
 	private BoardController boardController;
+	private FieldValueHandler fieldHandler;
 	private BoardModelItem currentModelItem;
+	private Timer timer;
 
 	public BoardPanel(int rows,
 					  int cols,
@@ -33,7 +37,7 @@ public class BoardPanel extends JPanel implements Observer {
 		this.cols = cols;
 		this.boardModel = boardModel;
 		this.boardModel.subscribe(this);
-		setup(boardModel.first());
+//		setup(boardModel.first());
 	}
 
 	public void setup(BoardModelItem item) {
@@ -42,20 +46,11 @@ public class BoardPanel extends JPanel implements Observer {
 		this.setLayout(new GridLayout(SQUARE_SIZE, SQUARE_SIZE));
 		this.setBorder(new EmptyBorder(20, 20, 20, 20));
 		this.currentModelItem = item;
-
-		JLabel timeLabel = new JLabel();
-		timeLabel.setFont(new Font("Arial", Font.BOLD, 26));
-		timeLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
-		this.add(timeLabel);
-
-		LocalDateTime date = LocalDateTime.now();
-		TimeLabelHandler timeLabelHandler = new TimeLabelHandler(date, timeLabel);
-		Timer timer = new Timer(1000, timeLabelHandler);
-
-		timer.start();
-
 		addSquarePanels();
 		addTextFields();
+		this.fieldHandler = new FieldValueHandler(boardModel, this, boardController);
+		addFieldListeners(fieldHandler);
+
 	}
 
 	private void addSquarePanels() {
@@ -82,6 +77,14 @@ public class BoardPanel extends JPanel implements Observer {
 			TextField textField = new TextField(i, j, currentModelItem.getState()[i][j]);
 			textFields[i][j] = textField;
 			panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
+		}
+	}
+
+	public void addFieldListeners(KeyListener listener) {
+		for (TextField[] fields : textFields) {
+			for (TextField field : fields) {
+				field.addKeyListener(listener);
+			}
 		}
 	}
 
@@ -113,6 +116,7 @@ public class BoardPanel extends JPanel implements Observer {
 //		}
 
 		if (SudokuValidator.isSolved(currentModelItem.getState())) {
+			stopTimer();
 			JOptionPane.showMessageDialog(this,
 										  "Congratulations! You have completed the board.",
 										  "Winner",
@@ -121,7 +125,17 @@ public class BoardPanel extends JPanel implements Observer {
 			gameOver = true;
 			return;
 		}
+	}
 
+	private void stopTimer() {
+		Container innerGamePanel = SwingUtilities.getAncestorOfClass(InnerGamePanel.class, this);
+
+		if (innerGamePanel instanceof InnerGamePanel) {
+			InnerGamePanel panel = (InnerGamePanel) innerGamePanel;
+			Timer timer = panel.getTimer();
+			timer.stop();
+			System.out.println("timer stopped");
+		}
 	}
 
 }
