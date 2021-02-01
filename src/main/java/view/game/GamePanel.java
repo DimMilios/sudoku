@@ -1,6 +1,7 @@
 package view.game;
 
 import model.BoardModel;
+import model.UserModel;
 import view.DifficultyLabel;
 import view.UsernameLabel;
 
@@ -13,20 +14,21 @@ public class GamePanel extends JPanel {
 	private UsernameLabel usernameLabel;
 	private DifficultyLabel difficultyLabel;
 
-	private BoardPanel boardPanel;
 	private InnerGamePanel innerGamePanel;
 
 	private final BoardModel boardModel;
+	private final UserModel userModel;
 
-	public GamePanel(BoardModel boardModel) {
+	public GamePanel(BoardModel boardModel, UserModel userModel) {
 		this.boardModel = boardModel;
+		this.userModel = userModel;
 		this.setup();
 	}
 
 	public void setup() {
 		this.setLayout(new BorderLayout());
 		initHeader();
-		this.usernameLabel = new UsernameLabel();
+		this.usernameLabel = new UsernameLabel(userModel);
 		this.difficultyLabel = new DifficultyLabel(boardModel);
 
 		JPanel info = new JPanel(new BorderLayout());
@@ -41,20 +43,9 @@ public class GamePanel extends JPanel {
 		this.revalidate();
 		this.repaint();
 	}
-//
-//	public void setBoardPanel(BoardPanel boardPanel) {
-//		this.boardPanel = boardPanel;
-//		this.add(boardPanel, BorderLayout.CENTER);
-//		this.revalidate();
-//		this.repaint();
-//	}
 
 	public InnerGamePanel getInnerGamePanel() {
 		return innerGamePanel;
-	}
-
-	public BoardPanel getBoardPanel() {
-		return boardPanel;
 	}
 
 	private void initHeader() {

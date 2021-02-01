@@ -1,6 +1,8 @@
 import com.formdev.flatlaf.FlatLightLaf;
 import controller.BoardController;
 import controller.UserController;
+import dao.*;
+import database.MySQLConnection;
 import model.*;
 import view.MainView;
 import view.menu.MenuBar;
@@ -13,6 +15,7 @@ public class Main {
 	BoardController boardController;
 	UserController userController;
 	BoardModel boardModel;
+	UserModel userModel;
 
 	MainView mainView;
 
@@ -23,10 +26,17 @@ public class Main {
 		difficultyFactory = new DifficultyFactory();
 
 		boardModel = new BoardModel();
-		mainView = new MainView(boardModel);
+		userModel = new UserModel();
+		mainView = new MainView(boardModel, userModel);
 
-		userController = new UserController(mainView);
-		boardController = new BoardController(mainView, difficultyFactory, boardModel);
+		MySQLConnection mySQLConnection = MySQLConnection.getInstance();
+		UserDAO userDao = new UserDAOImpl(mySQLConnection);
+		BoardDAO boardDao = new BoardDAOImpl(mySQLConnection, boardModel);
+		GameDAO gameDao = new GameDAOImpl(mySQLConnection, boardModel);
+
+		userController = new UserController(mainView, userDao, userModel);
+		boardController = new BoardController(mainView, difficultyFactory, boardDao, boardModel,
+											  gameDao);
 
 		mainView.setJMenuBar(new MenuBar(mainView, boardController));
 

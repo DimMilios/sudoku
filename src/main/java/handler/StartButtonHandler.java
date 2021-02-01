@@ -1,9 +1,12 @@
 package handler;
 
+import controller.BoardController;
 import view.UserPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static model.BoardModel.*;
 
 public class StartButtonHandler implements ActionListener {
 
@@ -18,6 +21,9 @@ public class StartButtonHandler implements ActionListener {
 		String difficulty = userPanel.getDifficultyGroup().getSelection().getActionCommand();
 		String username = userPanel.getNameField().getText();
 		userPanel.getUserController().update(username);
-		userPanel.getBoardController().initializeBoard(difficulty);
+
+		BoardController boardController = userPanel.getBoardController();
+		BoardModelItem item = boardController.initializeBoard(difficulty);
+		boardController.persist(item);
 	}
 }

@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyListener;
+import java.time.LocalDateTime;
 
 import static model.SudokuConstants.*;
 
@@ -34,7 +35,6 @@ public class BoardPanel extends JPanel implements Observer {
 		this.cols = cols;
 		this.boardModel = boardModel;
 		this.boardModel.subscribe(this);
-//		setup(boardModel.first());
 	}
 
 	public void setup(BoardModelItem item) {
@@ -97,17 +97,12 @@ public class BoardPanel extends JPanel implements Observer {
 		return currentModelItem;
 	}
 
-	public void setCurrentModelItem(BoardModelItem currentModelItem) {
-		this.currentModelItem = currentModelItem;
-	}
-
 	@Override
 	public void update(Object state) {
 		currentModelItem = (BoardModelItem) state;
-		System.out.println("Updated value=================\n" + currentModelItem);
+//		System.out.println("Updated value=================\n" + currentModelItem);
 
 		if (gameOver) return;
-
 
 		if (SudokuValidator.isSolved(currentModelItem.getState())) {
 			stopTimer();
@@ -148,6 +143,7 @@ public class BoardPanel extends JPanel implements Observer {
 			InnerGamePanel panel = (InnerGamePanel) innerGamePanel;
 			Timer timer = panel.getTimer();
 			timer.stop();
+			boardController.updateWithFinishTime(LocalDateTime.now());
 		}
 	}
 

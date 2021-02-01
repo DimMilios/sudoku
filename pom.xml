@@ -27,6 +27,13 @@
             <artifactId>flatlaf</artifactId>
             <version>0.46</version>
         </dependency>
+
+        <!-- MySQL Connector - https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.22</version>
+        </dependency>
     </dependencies>
 
 </project>

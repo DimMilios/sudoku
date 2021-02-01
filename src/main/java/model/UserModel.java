@@ -1,29 +1,19 @@
 package model;
 
-import observer.Observable;
 import observer.Observer;
 
 import java.util.ArrayList;
 
 
-public class UserModel extends Model implements Observable {
+public class UserModel extends Model {
     private String username;
 
-    private static UserModel instance = null;
-
-    private UserModel() {
+    public UserModel() {
         super(new ArrayList<>());
     }
 
-    public static UserModel getInstance() {
-        if (instance == null) {
-            instance = new UserModel();
-        }
-        return instance;
-    }
-
-    public UserModel(String username) {
-        super(new ArrayList<>());
+    public UserModel(int id, String username) {
+        super(id);
         this.username = username;
     }
 
@@ -37,8 +27,13 @@ public class UserModel extends Model implements Observable {
     }
 
     @Override
-    public long getId() {
-        return 0;
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        super.id = id;
     }
 
     @Override

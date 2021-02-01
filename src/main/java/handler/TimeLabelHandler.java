@@ -18,15 +18,11 @@ public class TimeLabelHandler implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		Date now = new Date();
-//		long diff = now.getTime() - date.getTime();
-//		int minutes = new Date(diff).getMinutes();
-//		int seconds = new Date(diff).getSeconds();
 		LocalTime now = LocalTime.now();
 		Duration durationDifference = Duration.between(date.toLocalTime(), now);
-		long hours = durationDifference.toHours();
-		long minutes = durationDifference.toMinutes();
-		long seconds = durationDifference.getSeconds();
+		long hours = durationDifference.toHours() % 24;
+		long minutes = durationDifference.toMinutes() % 60;
+		long seconds = durationDifference.getSeconds() % 60;
 		String hourStr = formatTimeDigits(hours);
 		String minStr = formatTimeDigits(minutes);
 		String secStr = formatTimeDigits(seconds);

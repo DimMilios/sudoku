@@ -9,9 +9,12 @@ import java.awt.*;
 
 public class UsernameLabel extends JLabel implements Observer {
 
-	public UsernameLabel() {
+	private final UserModel userModel;
+
+	public UsernameLabel(UserModel userModel) {
+		this.userModel = userModel;
 		this.setFont(new Font("Arial", Font.BOLD, 26));
-		UserModel.getInstance().subscribe(this);
+		userModel.subscribe(this);
 		this.setBorder(new EmptyBorder(10, 10, 10, 10));
 	}
 

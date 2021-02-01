@@ -1,10 +1,14 @@
 package controller;
 
+import dao.BoardDAO;
+import dao.GameDAO;
 import model.*;
 import model.BoardModel.BoardModelItem;
 import view.game.*;
 import view.MainView;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static model.SudokuConstants.*;
@@ -13,32 +17,52 @@ public class BoardController {
 	private final MainView mainView;
 	private final SudokuGenerator sudokuGenerator = SudokuGenerator.getInstance();
 	private final DifficultyFactory difficultyFactory;
+	private final BoardDAO boardDao;
 	private final BoardModel boardModel;
 	private String boardDifficulty;
 
+	private final GameDAO gameDAO;
+
 	public BoardController(MainView mainView,
 						   DifficultyFactory difficultyFactory,
-						   BoardModel boardModel) {
+						   BoardDAO boardDAO, BoardModel boardModel, GameDAO gameDAO) {
 		this.mainView = mainView;
 		this.difficultyFactory = difficultyFactory;
+		this.boardDao = boardDAO;
 		this.boardModel = boardModel;
+		this.gameDAO = gameDAO;
 	}
 
-	public void initializeBoard(String difficulty) {
-		update(difficulty);
+	public BoardModelItem initializeBoard(String difficulty) {
+		BoardModelItem item = boardItemOf(difficulty);
 		BoardPanel panel = new BoardPanel(BOARD_SIZE, BOARD_SIZE, boardModel);
 		panel.setBoardController(this);
 		InnerGamePanel innerGamePanel = new InnerGamePanel(panel);
-		innerGamePanel.setup(boardModel.first());
+		innerGamePanel.setup(item);
 		this.mainView.getGamePanel().setInnerGamePanel(innerGamePanel);
 
 		this.mainView.getCardLayout().show(mainView.getCardsContainer(), GAME_PANEL);
 		this.boardDifficulty = difficulty;
+		return item;
 	}
 
-	private void update(String difficulty) {
+	private BoardModelItem boardItemOf(String difficulty) {
 		BoardModelItem item = new BoardModelItem(difficulty, generateBoard(difficulty));
 		boardModel.add(item);
+		return item;
+	}
+
+	public void persist(BoardModelItem item) {
+		boardDao.save(item);
+		try {
+			UserModel user = gameDAO.findCurrentUser();
+			GamePojo toAdd = new GamePojo(user.getId(),
+										  boardModel.getId(),
+										  StartDateTimeSingleton.getInstance().getStartTime());
+			gameDAO.save(toAdd);
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		}
 	}
 
 	private int[][] generateBoard(String difficulty) {
@@ -52,7 +76,8 @@ public class BoardController {
 		gamePanel.remove(gamePanel.getInnerGamePanel());
 		boardModel.clear();
 		boardModel.unsubscribe(gamePanel.getInnerGamePanel().getBoardPanel());
-		initializeBoard(boardDifficulty);
+		BoardModelItem item = initializeBoard(boardDifficulty);
+		persist(item);
 	}
 
 	public void restartBoard() {
@@ -64,7 +89,12 @@ public class BoardController {
 		InnerGamePanel innerGamePanel = new InnerGamePanel(panel);
 		gamePanel.setInnerGamePanel(innerGamePanel);
 
-		innerGamePanel.setup(boardModel.first());
+		BoardModelItem item = boardModel.first();
+		boardModel.setId(boardModel.getId() + 1);
+		StartDateTimeSingleton.getInstance().setStartTime(LocalDateTime.now());
+		persist(item);
+
+		innerGamePanel.setup(item);
 		mainView.getCardLayout().show(mainView.getCardsContainer(), GAME_PANEL);
 		innerGamePanel.revalidate();
 		innerGamePanel.repaint();
@@ -80,10 +110,9 @@ public class BoardController {
 
 		if (!SudokuValidator.isSafe(currentItemState, gridX, gridY, keyValue)) {
 			textField.setFieldState(FieldStateFactory.create(INCORRECT_STATE, textField));
-		}
-		else {
+		} else {
 			textField.setFieldState(FieldStateFactory.create(DEFAULT_STATE, textField));
-			int[][] newState = new int[9][9];
+			int[][] newState = new int[currentItemState.length][currentItemState[0].length];
 			for (int i = 0; i < currentItemState.length; i++) {
 				newState[i] = Arrays.copyOf(currentItemState[i], currentItemState[i].length);
 			}
@@ -93,8 +122,14 @@ public class BoardController {
 		}
 	}
 
-	public void pushRoute(String route) {
-		mainView.getCardLayout()
-				.show(mainView.getCardsContainer(), route);
+	public void updateWithFinishTime(LocalDateTime finishTime) {
+		try {
+			UserModel currentUser = gameDAO.findCurrentUser();
+			GamePojo game = new GamePojo(currentUser.getId(), boardModel.getId());
+			game.setFinishTime(finishTime);
+			gameDAO.update(game);
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		}
 	}
 }

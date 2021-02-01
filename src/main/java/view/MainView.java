@@ -1,6 +1,7 @@
 package view;
 
 import model.BoardModel;
+import model.UserModel;
 import view.game.GamePanel;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class MainView extends JFrame {
     public final static int HEIGHT = 600;
 
     private final BoardModel boardModel;
+    private final UserModel userModel;
     private CardLayout cardLayout;
     private JPanel cardsContainer;
 
@@ -21,9 +23,10 @@ public class MainView extends JFrame {
     private GamePanel gamePanel;
     private HistoryPanel historyPanel;
 
-    public MainView(BoardModel boardModel) {
+    public MainView(BoardModel boardModel, UserModel userModel) {
         super("Sudoku");
         this.boardModel = boardModel;
+        this.userModel = userModel;
         initComponents();
     }
 
@@ -34,7 +37,7 @@ public class MainView extends JFrame {
         this.userPanel = new UserPanel();
         this.historyPanel = new HistoryPanel();
 
-        this.gamePanel = new GamePanel(boardModel);
+        this.gamePanel = new GamePanel(boardModel, userModel);
         cardsContainer.add(gamePanel, GAME_PANEL);
 
         cardsContainer.add(userPanel, USER_PANEL);

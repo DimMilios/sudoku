@@ -27,8 +27,12 @@ public class UserPanel extends JPanel {
     }
 
     private void initComponents() {
+
+        JPanel namePanel = new JPanel();
         nameLabel = new JLabel("Enter your username:");
         nameField = new JTextField();
+        namePanel.add(nameLabel);
+        namePanel.add(nameField);
 
         difficultyLabel = new JLabel("Choose a difficulty:");
         easy = new JRadioButton(EASY, true);
@@ -46,8 +50,9 @@ public class UserPanel extends JPanel {
         startButton = new JButton("Start");
         startButton.addActionListener(new StartButtonHandler(this));
 
-        this.add(nameLabel);
-        this.add(nameField);
+//        this.add(nameLabel);
+//        this.add(nameField);
+        this.add(namePanel);
         this.add(difficultyLabel);
         this.add(easy);
         this.add(normal);

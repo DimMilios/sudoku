@@ -12,10 +12,13 @@ public class BoardModel extends Model {
         super(new ArrayList<>());
     }
 
+    public BoardModel(int id) {
+        super(id);
+    }
+
     public void add(BoardModelItem item) {
         if (item != null) {
             this.snapshots.add(item);
-//            System.out.println("Added item: " + item);
             notifyObservers();
         }
     }
@@ -90,66 +93,25 @@ public class BoardModel extends Model {
         }
     }
 
-    //    private String difficulty;
-//    private int[][] state;
-//
-//    private int currentTurn;
-
-//    public BoardModel() {
-//        super(new ArrayList<>());
-//        this.state = new int[9][9];
-//    }
-//
-//    public BoardModel(String difficulty, int[][] state) {
-//        super(new ArrayList<>());
-//        this.difficulty = difficulty;
-//        this.state = state;
-//    }
-
-//    public String getDifficulty() {
-//        return difficulty;
-//    }
-//
-//    public void setDifficulty(String difficulty) {
-//        this.difficulty = difficulty;
-//    }
-//
-//    public int[][] getState() {
-//        return state;
-//    }
-//
-//    public void setState(int[][] state) {
-//        for (int i = 0; i < state.length; i++) {
-//            this.state[i] = Arrays.copyOf(state[i], state[i].length);
-//        }
-//        notifyObservers();
-//    }
-//
-//    public void setField(int x, int y, int value) {
-//        this.state[x][y] = value;
-//        notifyObservers();
-//    }
-//
-//    public int getCurrentTurn() {
-//        return currentTurn;
-//    }
-//
-//    public void setCurrentTurn(int currentTurn) {
-//        this.currentTurn = currentTurn;
-//    }
-
     @Override
-    public long getId() {
-        return 0;
+    public int getId() {
+        return id;
     }
 
-//    @Override
-//    public String toString() {
-//        return "BoardModel{" +
-//                "difficulty='" + difficulty + '\'' +
-//                ", state=" + printState(state)  +
-//                ", currentTurn=" + currentTurn +
-//                ", id=" + id +
-//                "}\n";
-//    }
+    @Override
+    public void setId(int id) {
+        if (id > 0) {
+            super.id = id;
+        } else {
+            throw new IllegalArgumentException("Negative ID value");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "BoardModel{" +
+                "snapshots=" + snapshots +
+                ", id=" + id +
+                '}';
+    }
 }

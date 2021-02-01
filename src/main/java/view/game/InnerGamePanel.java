@@ -1,6 +1,7 @@
 package view.game;
 
 import handler.TimeLabelHandler;
+import model.StartDateTimeSingleton;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,6 +32,7 @@ public class InnerGamePanel extends JPanel {
 		this.add(boardPanel, BorderLayout.NORTH);
 
 		LocalDateTime date = LocalDateTime.now();
+		StartDateTimeSingleton.getInstance().setStartTime(date);
 		TimeLabelHandler timeLabelHandler = new TimeLabelHandler(date, timeLabel);
 		timer = new Timer(0, timeLabelHandler);
 

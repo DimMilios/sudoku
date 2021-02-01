@@ -24,12 +24,4 @@ public class FieldController {
 //		boardModel.setField(gridX, gridY, keyValue);
 	}
 
-	public void addListener(EventListener listener) {
-		TextField[][] textFields = mainView.getGamePanel().getBoardPanel().getTextFields();
-		for (TextField[] fields : textFields) {
-			for (TextField field : fields) {
-				field.addKeyListener(fieldValueHandler);
-			}
-		}
-	}
 }
