@@ -57,7 +57,7 @@ public class UserModel extends Model {
     @Override
     public void notifyObservers() {
         for (Observer o : this.observers) {
-            o.update(username);
+            o.updateWith(username);
         }
     }
 }

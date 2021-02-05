@@ -2,8 +2,7 @@ package com.tei.handler;
 
 import com.tei.controller.FieldController;
 import com.tei.model.BoardModel;
-import com.tei.view.game.BoardPanel;
-import com.tei.view.game.TextField;
+import com.tei.view.game.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -41,12 +40,18 @@ public class FieldValueHandler implements KeyListener {
 		}
 
 		int keyCode = e.getKeyCode();
-		if (keyIsNumeric(keyCode)) {
+		if (keyPressIsNumeric(keyCode)) {
 			writeNumberValue(e);
-		}
-		else {
+		} else if (keyCode == KeyEvent.VK_BACK_SPACE || keyCode == KeyEvent.VK_DELETE) {
+			resetField();
+		} else {
 			moveWithArrowKeys(keyCode);
 		}
+	}
+
+	private boolean keyPressIsNumeric(int keyCode) {
+		return (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_9)
+				|| (keyCode >= KeyEvent.VK_NUMPAD1 && keyCode <= KeyEvent.VK_NUMPAD9);
 	}
 
 	private void writeNumberValue(KeyEvent e) {
@@ -55,6 +60,12 @@ public class FieldValueHandler implements KeyListener {
 		int keyValue = Character.getNumericValue(e.getKeyChar());
 		BoardModel.BoardModelItem currentModelItem = boardPanel.getCurrentModelItem();
 		fieldController.updateField(textField, keyValue, currentModelItem);
+	}
+
+	private void resetField() {
+		if (!textField.isEditable()
+				|| textField.getValue() == null) return;
+		fieldController.resetToDefault(textField);
 	}
 
 	private void moveWithArrowKeys(int keyCode) {
@@ -89,13 +100,12 @@ public class FieldValueHandler implements KeyListener {
 				return;
 		}
 
-		// Focus next field on arrow key move
+		focusNextTextField(nextX, nextY);
+	}
+
+	private void focusNextTextField(int nextX, int nextY) {
 		TextField nextField = boardPanel.getTextFields()[nextX][nextY];
 		nextField.requestFocusInWindow();
 	}
 
-	private boolean keyIsNumeric(int keyCode) {
-		return (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_9)
-				|| (keyCode >= KeyEvent.VK_NUMPAD1 && keyCode <= KeyEvent.VK_NUMPAD9);
-	}
 }

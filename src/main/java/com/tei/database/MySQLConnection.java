@@ -5,12 +5,6 @@ import java.sql.*;
 import java.util.Properties;
 
 public class MySQLConnection {
-
-//	private static String databaseURL = "jdbc:mysql://localhost:3306/";
-//	private static String databaseName = "sudoku";
-//	private static String username = "root";
-//	private static String password = "root";
-
 	private static String databaseURL;
 	private static String username;
 	private static String password;
@@ -28,7 +22,6 @@ public class MySQLConnection {
 	}
 
 	public Connection getConnection() {
-
 //		String url = databaseURL + databaseName + "?useSSL=false&characterEncoding=UTF-8";
 		String url = getInstance().readDbProperties() + "?useSSL=false&characterEncoding=UTF-8";
 		try {
@@ -38,10 +31,6 @@ public class MySQLConnection {
 			throwables.printStackTrace();
 		}
 		return null;
-	}
-
-	public static void closeConnection() throws SQLException {
-		connection.close();
 	}
 
 	private String readDbProperties() {
@@ -60,8 +49,4 @@ public class MySQLConnection {
 		}
 		throw new RuntimeException("Error loading properties file");
 	}
-
-//	public static void main(String[] args) {
-//		getConnection();
-//	}
 }

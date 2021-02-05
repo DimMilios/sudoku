@@ -12,8 +12,8 @@ import static com.tei.model.SudokuConstants.*;
 
 public class MainView extends JFrame {
 
-    public final static int WIDTH = 800;
-    public final static int HEIGHT = 600;
+    public final static int WIDTH = 1000;
+    public final static int HEIGHT = 800;
 
     private final BoardModel boardModel;
     private final UserModel userModel;
@@ -50,10 +50,10 @@ public class MainView extends JFrame {
         cardsContainer.add(aboutPanel, ABOUT_PANEL);
 
         cardLayout.show(cardsContainer, USER_PANEL);
-//        cardLayout.show(cardsContainer, ABOUT_PANEL);
 
         this.getContentPane().add(cardsContainer);
         this.setSize(WIDTH, HEIGHT);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);

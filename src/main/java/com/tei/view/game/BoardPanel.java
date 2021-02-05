@@ -49,7 +49,6 @@ public class BoardPanel extends JPanel implements Observer {
 		addTextFields();
 		this.fieldHandler = new FieldValueHandler(boardModel, this, fieldController);
 		addFieldListeners(fieldHandler);
-
 	}
 
 	private void addSquarePanels() {
@@ -87,6 +86,17 @@ public class BoardPanel extends JPanel implements Observer {
 		}
 	}
 
+	protected void undo() {
+		if (boardModel.pop()) {
+			for (int i = 0; i < textFields.length; i++) {
+				for (int j = 0; j < textFields[i].length; j++) {
+					if (textFields[i][j].getFieldState() instanceof DefaultFieldState)
+						textFields[i][j].setValue(currentModelItem.getState()[i][j]);
+				}
+			}
+		}
+	}
+
 	public TextField[][] getTextFields() {
 		return textFields;
 	}
@@ -104,7 +114,7 @@ public class BoardPanel extends JPanel implements Observer {
 	}
 
 	@Override
-	public void update(Object state) {
+	public void updateWith(Object state) {
 		currentModelItem = (BoardModelItem) state;
 //		System.out.println("Updated value=================\n" + currentModelItem);
 
@@ -116,7 +126,6 @@ public class BoardPanel extends JPanel implements Observer {
 			int option = getOption();
 			performOptionAction(option);
 		}
-
 	}
 
 	private void performOptionAction(int option) {
@@ -149,7 +158,7 @@ public class BoardPanel extends JPanel implements Observer {
 			InnerGamePanel panel = (InnerGamePanel) innerGamePanel;
 			Timer timer = panel.getTimer();
 			timer.stop();
-			boardController.updateWithFinishTime(LocalDateTime.now());
+			boardController.persistWithFinishTime(LocalDateTime.now());
 		}
 	}
 

@@ -19,7 +19,7 @@ public class DifficultyLabel extends JLabel implements Observer {
 	}
 
 	@Override
-	public void update(Object state) {
+	public void updateWith(Object state) {
 		if (boardModel.last().getDifficulty() != null) {
 			this.setText("Difficulty: " + boardModel.last().getDifficulty());
 		}

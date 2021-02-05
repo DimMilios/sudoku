@@ -1,7 +1,7 @@
 package com.tei.view.menu;
 
-import com.tei.view.MainView;
 import com.tei.controller.BoardController;
+import com.tei.view.MainView;
 
 import javax.swing.*;
 
@@ -21,16 +21,5 @@ public class MenuFactory {
                 return null;
         }
     }
-//
-//    public static JMenuItem createMenuItem(String name) {
-//        switch (name) {
-//            case NEW_GAME:
-//                return new MenuItem(name);
-//            case RESTART:
-//            case EXIT:
-//            case SHOW_HISTORY:
-//            case HIDE_HISTORY:
-//            case ABOUT:
-//        }
-//    }
+
 }

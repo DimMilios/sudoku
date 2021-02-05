@@ -3,8 +3,9 @@ package com.tei.view.game;
 import javax.swing.*;
 import java.awt.*;
 
-public class DefaultFieldState extends FieldState {
-	public DefaultFieldState(TextField textField) {
+public class EmptyFieldState extends FieldState{
+
+	public EmptyFieldState(TextField textField) {
 		super(textField);
 		update();
 	}
@@ -14,7 +15,8 @@ public class DefaultFieldState extends FieldState {
 		super.textField.setEditable(true);
 		super.textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
 				"TextField.border"));
-		super.textField.setFont(new Font("Arial", Font.BOLD, 32));
-		super.textField.setForeground(new Color(20, 20, 190));
+		super.textField.setText("");
+		super.textField.setValue(null);
+		super.textField.setForeground(Color.ORANGE);
 	}
 }

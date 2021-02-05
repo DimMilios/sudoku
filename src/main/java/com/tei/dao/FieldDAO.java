@@ -1,8 +1,8 @@
 package com.tei.dao;
 
-import com.tei.model.FieldModel;
+import com.tei.model.FieldPojo;
 
 public interface FieldDAO {
 
-	boolean save(FieldModel entity);
+	boolean save(FieldPojo entity);
 }

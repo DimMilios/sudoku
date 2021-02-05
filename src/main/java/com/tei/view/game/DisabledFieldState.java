@@ -13,7 +13,7 @@ public class DisabledFieldState extends FieldState {
 		super.textField.setEditable(false);
 		super.textField.setOpaque(true);
 		super.textField.setBackground(new Color(255, 255, 255));
-		super.textField.setFont(new Font("Arial", Font.BOLD, 24));
+		super.textField.setFont(new Font("Arial", Font.BOLD, 32));
 	}
 
 }

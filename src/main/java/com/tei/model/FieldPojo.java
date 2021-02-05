@@ -2,13 +2,13 @@ package com.tei.model;
 
 import java.time.LocalDateTime;
 
-public class FieldModel {
+public class FieldPojo {
 	private final int x;
 	private final int y;
 	private final int value;
 	private LocalDateTime moveTime;
 
-	public FieldModel(int x, int y, int value) {
+	public FieldPojo(int x, int y, int value) {
 		this.x = x;
 		this.y = y;
 		this.value = value;
@@ -28,7 +28,7 @@ public class FieldModel {
 
 	@Override
 	public String toString() {
-		return "FieldModel {" +
+		return "FieldPojo {" +
 				"x=" + x +
 				", y=" + y +
 				", value=" + value +

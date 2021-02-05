@@ -11,6 +11,7 @@ public class TextField extends JFormattedTextField {
 
 	private int gridX;
 	private int gridY;
+	private int number;
 	private FieldState fieldState;
 
 	public static MaskFormatter addFormatter() {
@@ -29,12 +30,13 @@ public class TextField extends JFormattedTextField {
 		init();
 	}
 
-	public TextField(int gridX, int gridY, int value) {
+	public TextField(int gridX, int gridY, int number) {
 		super(addFormatter());
 		this.gridX = gridX;
 		this.gridY = gridY;
+		this.number = number;
 		init();
-		initState(value);
+		initState();
 	}
 
 	private void init() {
@@ -43,10 +45,10 @@ public class TextField extends JFormattedTextField {
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
-	private void initState(int value) {
-		if (value >= 1 && value <= 9) {
+	private void initState() {
+		if (number >= 1 && number <= 9) {
 			this.fieldState = FieldStateFactory.create(DISABLED_STATE, this);
-			this.setText(String.valueOf(value));
+			this.setText(String.valueOf(number));
 		} else {
 		  this.fieldState = FieldStateFactory.create(DEFAULT_STATE, this);
 		}
@@ -67,4 +69,5 @@ public class TextField extends JFormattedTextField {
 	public void setFieldState(FieldState fieldState) {
 		this.fieldState = fieldState;
 	}
+
 }

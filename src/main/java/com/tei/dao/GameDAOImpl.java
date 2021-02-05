@@ -59,6 +59,7 @@ public class GameDAOImpl implements GameDAO {
 		return false;
 	}
 
+	@Override
 	public UserModel findCurrentUser() throws SQLException {
 		String query = "SELECT * FROM USERS u WHERE u.id = (SELECT MAX(id) FROM USERS);";
 		try (Connection connection = mySqlConnection.getConnection();

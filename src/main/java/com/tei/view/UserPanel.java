@@ -6,6 +6,8 @@ import com.tei.handler.StartButtonHandler;
 
 import javax.swing.*;
 
+import java.awt.*;
+
 import static com.tei.model.SudokuConstants.*;
 
 public class UserPanel extends JPanel {
@@ -27,13 +29,34 @@ public class UserPanel extends JPanel {
     }
 
     private void initComponents() {
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JPanel emptyPanel = new JPanel();
+        emptyPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) (MainView.HEIGHT * 0.3)));
+        this.add(emptyPanel);
 
         JPanel namePanel = new JPanel();
         nameLabel = new JLabel("Enter your username:");
         nameField = new JTextField();
+        namePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE,
+                                               (int) (nameLabel.getPreferredSize().getHeight() + nameField.getPreferredSize().getHeight())));
         namePanel.add(nameLabel);
         namePanel.add(nameField);
 
+        initDifficultyButtonGroup();
+
+        startButton = new JButton("Start");
+        startButton.addActionListener(new StartButtonHandler(this));
+
+        this.add(namePanel);
+        this.add(difficultyLabel);
+        this.add(easy);
+        this.add(normal);
+        this.add(hard);
+        this.add(startButton);
+    }
+
+    private void initDifficultyButtonGroup() {
         difficultyLabel = new JLabel("Choose a difficulty:");
         easy = new JRadioButton(EASY, true);
         easy.setActionCommand(EASY);
@@ -46,18 +69,6 @@ public class UserPanel extends JPanel {
         difficultyGroup.add(easy);
         difficultyGroup.add(normal);
         difficultyGroup.add(hard);
-
-        startButton = new JButton("Start");
-        startButton.addActionListener(new StartButtonHandler(this));
-
-//        this.add(nameLabel);
-//        this.add(nameField);
-        this.add(namePanel);
-        this.add(difficultyLabel);
-        this.add(easy);
-        this.add(normal);
-        this.add(hard);
-        this.add(startButton);
     }
 
     public JTextField getNameField() {

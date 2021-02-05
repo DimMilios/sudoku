@@ -10,6 +10,8 @@ public class FieldStateFactory {
 				return new DisabledFieldState(textField);
 			case INCORRECT_STATE:
 				return new IncorrectFieldState(textField);
+			case EMPTY_STATE:
+				return new EmptyFieldState(textField);
 			default:
 				return new DefaultFieldState(textField);
 		}

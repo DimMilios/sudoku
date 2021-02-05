@@ -1,9 +1,7 @@
 package com.tei;
 
 import com.formdev.flatlaf.FlatLightLaf;
-import com.tei.controller.BoardController;
-import com.tei.controller.FieldController;
-import com.tei.controller.UserController;
+import com.tei.controller.*;
 import com.tei.dao.*;
 import com.tei.database.MySQLConnection;
 import com.tei.model.BoardModel;
@@ -41,12 +39,12 @@ public class Main {
 		UserDAO userDao = new UserDAOImpl(mySQLConnection);
 		BoardDAO boardDao = new BoardDAOImpl(mySQLConnection, boardModel);
 		GameDAO gameDao = new GameDAOImpl(mySQLConnection, boardModel);
-		FieldDAO fieldDAO = new FieldDAOImpl(mySQLConnection);
+		FieldDAO fieldDAO = new FieldDAOImpl(mySQLConnection, boardModel, userModel);
 
-		userController = new UserController(mainView, userDao, userModel);
-		fieldController = new FieldController(boardModel, mainView, fieldDAO);
-		boardController = new BoardController(mainView, difficultyFactory, boardDao, boardModel,
-											  gameDao, fieldController);
+		userController = new UserControllerImpl(mainView, userDao, userModel);
+		fieldController = new FieldControllerImpl(boardModel, mainView, fieldDAO);
+		boardController = new BoardControllerImpl(mainView, difficultyFactory, boardDao, boardModel,
+												  gameDao, fieldController);
 
 		mainView.setJMenuBar(new MenuBar(mainView, boardController));
 

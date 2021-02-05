@@ -20,7 +20,7 @@ public class StartButtonHandler implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String difficulty = userPanel.getDifficultyGroup().getSelection().getActionCommand();
 		String username = userPanel.getNameField().getText();
-		userPanel.getUserController().update(username);
+		userPanel.getUserController().updateUserModelWith(username);
 
 		BoardController boardController = userPanel.getBoardController();
 		BoardModelItem item = boardController.initializeBoard(difficulty);

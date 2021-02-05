@@ -16,7 +16,7 @@ public class BoardModel extends Model {
         super(id);
     }
 
-    public void add(BoardModelItem item) {
+    public void push(BoardModelItem item) {
         if (item != null) {
             this.snapshots.add(item);
             notifyObservers();
@@ -29,6 +29,14 @@ public class BoardModel extends Model {
 
     public BoardModelItem last() {
         return this.snapshots.get(snapshots.size() - 1);
+    }
+
+    public boolean pop() {
+        if (snapshots.size() <= 1 )
+            return false;
+        this.snapshots.remove(last());
+        notifyObservers();
+        return true;
     }
 
     public List<BoardModelItem> getSnapshots() {
@@ -89,7 +97,7 @@ public class BoardModel extends Model {
     @Override
     public void notifyObservers() {
         for (Observer o : this.observers){
-            o.update(this.last());
+            o.updateWith(this.last());
         }
     }
 

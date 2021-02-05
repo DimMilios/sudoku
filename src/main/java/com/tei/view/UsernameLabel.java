@@ -19,7 +19,7 @@ public class UsernameLabel extends JLabel implements Observer {
 	}
 
 	@Override
-	public void update(Object state) {
+	public void updateWith(Object state) {
 		String username = (String) state;
 		this.setText("User: " + username);
 	}
