@@ -1,5 +1,7 @@
 package com.tei.view.game;
 
+import com.tei.model.SudokuConstants;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,8 +15,7 @@ public class EmptyFieldState extends FieldState{
 	@Override
 	public void update() {
 		super.textField.setEditable(true);
-		super.textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder(
-				"TextField.border"));
+		super.textField.setBorder(SudokuConstants.DEFAULT_TEXTFIELD_BORDER);
 		super.textField.setText("");
 		super.textField.setValue(null);
 		super.textField.setForeground(Color.ORANGE);

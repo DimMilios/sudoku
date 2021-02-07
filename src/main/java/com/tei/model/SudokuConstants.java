@@ -1,5 +1,7 @@
 package com.tei.model;
 
+import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class SudokuConstants {
@@ -11,7 +13,9 @@ public class SudokuConstants {
 	public static final int NORMAL_MISSING_DIGITS = 51;
 	public static final int HARD_MISSING_DIGITS = 56;
 
-	public static Color SELECTED = new Color(246, 250, 255);
+	public static Color SELECTED = new Color(160, 160, 255);
+	public static Border DEFAULT_TEXTFIELD_BORDER = UIManager.getLookAndFeel().getDefaults().getBorder(
+			"TextField.border");
 
 	public static final String USER_PANEL = "User panel";
 	public static final String GAME_PANEL = "Game panel";

@@ -5,6 +5,7 @@ import com.tei.view.game.BoardPanel;
 import com.tei.view.game.FieldStateFactory;
 import com.tei.view.game.TextField;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -22,6 +23,8 @@ public class FieldFocusHandler implements FocusListener {
 	@Override
 	public void focusGained(FocusEvent e) {
 		TextField focused = (TextField) e.getSource();
+		focused.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 3));
+
 		int x = focused.getPosition().getX();
 		int y = focused.getPosition().getY();
 		int squareX = focused.getPosition().getSquareX();
@@ -44,6 +47,9 @@ public class FieldFocusHandler implements FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent e) {
+		TextField focused = (TextField) e.getSource();
+		focused.setBorder(SudokuConstants.DEFAULT_TEXTFIELD_BORDER);
+
 		for (int i = 0; i < boardPanel.getTextFields().length; i++) {
 			for (int j = 0; j < boardPanel.getTextFields()[i].length; j++) {
 				if (boardPanel.getTextFields()[i][j].getBackground().equals(SELECTED)) {

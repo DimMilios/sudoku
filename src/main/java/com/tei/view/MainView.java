@@ -12,8 +12,8 @@ import static com.tei.model.SudokuConstants.*;
 
 public class MainView extends JFrame {
 
-    public final static int WIDTH = 1000;
-    public final static int HEIGHT = 800;
+    public final static int WIDTH = 1200;
+    public final static int HEIGHT = 1000;
 
     private final BoardModel boardModel;
     private final UserModel userModel;
