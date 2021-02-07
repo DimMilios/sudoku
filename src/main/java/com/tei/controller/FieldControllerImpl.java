@@ -3,6 +3,7 @@ package com.tei.controller;
 import com.tei.dao.FieldDAO;
 import com.tei.log.StdOutHandler;
 import com.tei.model.BoardModel;
+import com.tei.model.BoardModelItem;
 import com.tei.model.FieldPojo;
 import com.tei.model.SudokuValidator;
 import com.tei.view.MainView;
@@ -12,7 +13,6 @@ import com.tei.view.game.TextField;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-import static com.tei.model.BoardModel.*;
 import static com.tei.model.SudokuConstants.*;
 
 public class FieldControllerImpl implements FieldController {
@@ -38,8 +38,8 @@ public class FieldControllerImpl implements FieldController {
 
 	@Override
 	public void updateField(TextField textField, int keyValue, BoardModelItem currentItem) {
-		int gridX = textField.getGridX();
-		int gridY = textField.getGridY();
+		int gridX = textField.getPosition().getX();
+		int gridY = textField.getPosition().getY();
 
 		int[][] currentItemState = currentItem.getState();
 		textField.setValue(keyValue);
@@ -58,14 +58,6 @@ public class FieldControllerImpl implements FieldController {
 		}
 	}
 
-	@Override
-	public void resetToDefault(TextField textField) {
-		if (boardModel.pop()) {
-			textField.setFieldState(FieldStateFactory.create(EMPTY_STATE, textField));
-			LOGGER.info("Field at: {" + textField.getGridX() + ", " + textField.getGridY() + "} deleted");
-		}
-	}
-
 	private int[][] copyState(int[][] currentItemState) {
 		int[][] newState = new int[currentItemState.length][currentItemState[0].length];
 		for (int i = 0; i < currentItemState.length; i++) {
@@ -74,4 +66,11 @@ public class FieldControllerImpl implements FieldController {
 		return newState;
 	}
 
+	@Override
+	public void resetToDefault(TextField textField) {
+		if (boardModel.pop()) {
+			textField.setFieldState(FieldStateFactory.create(EMPTY_STATE, textField));
+			LOGGER.info("Field at: " + textField.getPosition() + "deleted");
+		}
+	}
 }

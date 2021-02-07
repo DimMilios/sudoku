@@ -2,7 +2,9 @@ package com.tei.handler;
 
 import com.tei.controller.FieldController;
 import com.tei.model.BoardModel;
+import com.tei.model.BoardModelItem;
 import com.tei.view.game.*;
+import com.tei.view.game.TextField;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -58,7 +60,7 @@ public class FieldValueHandler implements KeyListener {
 		if (!textField.isEditable()) return;
 
 		int keyValue = Character.getNumericValue(e.getKeyChar());
-		BoardModel.BoardModelItem currentModelItem = boardPanel.getCurrentModelItem();
+		BoardModelItem currentModelItem = boardPanel.getCurrentModelItem();
 		fieldController.updateField(textField, keyValue, currentModelItem);
 	}
 
@@ -69,8 +71,8 @@ public class FieldValueHandler implements KeyListener {
 	}
 
 	private void moveWithArrowKeys(int keyCode) {
-		int oldX = textField.getGridX();
-		int oldY = textField.getGridY();
+		int oldX = textField.getPosition().getX();
+		int oldY = textField.getPosition().getY();
 
 		int nextX = oldX;
 		int nextY = oldY;

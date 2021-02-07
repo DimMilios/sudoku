@@ -1,8 +1,8 @@
 package com.tei.controller;
 
-import java.time.LocalDateTime;
+import com.tei.model.BoardModelItem;
 
-import static com.tei.model.BoardModel.*;
+import java.time.LocalDateTime;
 
 /**
  * The board controller interface contains methods describing operations related to the game board's

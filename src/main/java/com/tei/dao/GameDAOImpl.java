@@ -19,16 +19,6 @@ public class GameDAOImpl implements GameDAO {
 	}
 
 	@Override
-	public Iterable<GamePojo> findAll() {
-		return null;
-	}
-
-	@Override
-	public GamePojo findById(int id) {
-		return null;
-	}
-
-	@Override
 	public boolean save(GamePojo entity) throws SQLException {
 		String query = "INSERT INTO GAMES(user_id, board_id, start_time) VALUES (?, ?, ?)";
 		try (Connection connection = mySqlConnection.getConnection();

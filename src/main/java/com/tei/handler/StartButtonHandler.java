@@ -1,12 +1,11 @@
 package com.tei.handler;
 
 import com.tei.controller.BoardController;
+import com.tei.model.BoardModelItem;
 import com.tei.view.UserPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import static com.tei.model.BoardModel.*;
 
 public class StartButtonHandler implements ActionListener {
 

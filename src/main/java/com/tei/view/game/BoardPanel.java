@@ -3,8 +3,9 @@ package com.tei.view.game;
 import com.tei.controller.BoardController;
 import com.tei.controller.FieldController;
 import com.tei.handler.FieldValueHandler;
+import com.tei.handler.FieldFocusHandler;
 import com.tei.model.BoardModel;
-import com.tei.model.BoardModel.BoardModelItem;
+import com.tei.model.BoardModelItem;
 import com.tei.model.SudokuValidator;
 import com.tei.observer.Observer;
 
@@ -22,12 +23,13 @@ public class BoardPanel extends JPanel implements Observer {
 	private final int cols;
 
 	private final BoardModel boardModel;
-	private final JPanel[][] panels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
+	private final JPanel[][] squarePanels = new JPanel[SQUARE_SIZE][SQUARE_SIZE];
 	private TextField[][] textFields;
 	private boolean gameOver;
 	private BoardController boardController;
 	private FieldController fieldController;
 	private FieldValueHandler fieldHandler;
+	private FieldFocusHandler focusHandler;
 	private BoardModelItem currentModelItem;
 
 	public BoardPanel(int rows,
@@ -48,7 +50,9 @@ public class BoardPanel extends JPanel implements Observer {
 		addSquarePanels();
 		addTextFields();
 		this.fieldHandler = new FieldValueHandler(boardModel, this, fieldController);
-		addFieldListeners(fieldHandler);
+		this.focusHandler = new FieldFocusHandler(this);
+
+		addFieldListeners(fieldHandler, focusHandler);
 	}
 
 	private void addSquarePanels() {
@@ -59,8 +63,8 @@ public class BoardPanel extends JPanel implements Observer {
 
 	private void addSquarePanel(int i) {
 		for (int j = 0; j < SQUARE_SIZE; j++) {
-			panels[i][j] = new SquarePanel();
-			this.add(panels[i][j]);
+			squarePanels[i][j] = new SquarePanel();
+			this.add(squarePanels[i][j]);
 		}
 	}
 
@@ -72,26 +76,31 @@ public class BoardPanel extends JPanel implements Observer {
 
 	private void addTextField(int i) {
 		for (int j = 0; j < cols; j++) {
-			TextField textField = new TextField(i, j, currentModelItem.getState()[i][j]);
+			TextField textField = new TextField(
+					new Position(i, j, i - i % SQUARE_SIZE, j - j % SQUARE_SIZE),
+					currentModelItem.getValueAt(i, j));
+
 			textFields[i][j] = textField;
-			panels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
+			squarePanels[i / SQUARE_SIZE][j / SQUARE_SIZE].add(textField);
 		}
 	}
 
-	public void addFieldListeners(KeyListener listener) {
+	public void addFieldListeners(KeyListener listener,
+								  FieldFocusHandler focusHandler) {
 		for (TextField[] fields : textFields) {
 			for (TextField field : fields) {
 				field.addKeyListener(listener);
+				field.addFocusListener(focusHandler);
 			}
 		}
 	}
 
 	protected void undo() {
 		if (boardModel.pop()) {
-			for (int i = 0; i < textFields.length; i++) {
-				for (int j = 0; j < textFields[i].length; j++) {
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
 					if (textFields[i][j].getFieldState() instanceof DefaultFieldState)
-						textFields[i][j].setValue(currentModelItem.getState()[i][j]);
+						textFields[i][j].setValue(currentModelItem.getValueAt(i, j));
 				}
 			}
 		}
@@ -116,7 +125,6 @@ public class BoardPanel extends JPanel implements Observer {
 	@Override
 	public void updateWith(Object state) {
 		currentModelItem = (BoardModelItem) state;
-//		System.out.println("Updated value=================\n" + currentModelItem);
 
 		if (gameOver) return;
 

@@ -19,10 +19,6 @@ public class MessageConsole {
 	private JTextComponent textComponent;
 	private Document document;
 
-//	public MessageConsole(JTextComponent textComponent) {
-//		this(textComponent);
-//	}
-
 	/*
 	 *	Use the text component specified as a simply console to display
 	 *  text messages.

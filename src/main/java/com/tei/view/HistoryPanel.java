@@ -20,6 +20,8 @@ public class HistoryPanel extends JPanel {
 		initHeader();
 		historyTextArea = new JTextArea();
 		historyTextArea.setFont(new Font("Consolas", Font.PLAIN, 16));
+		historyTextArea.setBackground(Color.WHITE);
+		historyTextArea.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 		scrollPane = new JScrollPane(historyTextArea);
 
 		MessageConsole messageConsole = new MessageConsole(historyTextArea);

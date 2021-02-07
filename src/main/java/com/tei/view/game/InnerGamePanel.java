@@ -1,6 +1,7 @@
 package com.tei.view.game;
 
 import com.tei.handler.TimeLabelHandler;
+import com.tei.model.BoardModelItem;
 import com.tei.model.StartDateTimeSingleton;
 
 import javax.swing.*;

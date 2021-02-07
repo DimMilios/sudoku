@@ -2,6 +2,7 @@ package com.tei.dao;
 
 import com.tei.database.MySQLConnection;
 import com.tei.model.BoardModel;
+import com.tei.model.BoardModelItem;
 
 import java.sql.*;
 
@@ -15,16 +16,6 @@ public class BoardDAOImpl implements BoardDAO {
 	public BoardDAOImpl(MySQLConnection mySqlConnection, BoardModel boardModel) {
 		this.mySqlConnection = mySqlConnection;
 		this.boardModel = boardModel;
-	}
-
-	@Override
-	public Iterable<BoardModelItem> findAll() {
-		return null;
-	}
-
-	@Override
-	public BoardModelItem findById(int id) {
-		return null;
 	}
 
 	@Override

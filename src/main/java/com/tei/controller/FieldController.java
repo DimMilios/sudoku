@@ -1,6 +1,6 @@
 package com.tei.controller;
 
-import com.tei.model.BoardModel;
+import com.tei.model.BoardModelItem;
 import com.tei.view.game.TextField;
 
 /**
@@ -15,7 +15,7 @@ public interface FieldController {
 	 * @param keyValue    the key value given by the user
 	 * @param currentItem the current item representing board state
 	 */
-	void updateField(TextField textField, int keyValue, BoardModel.BoardModelItem currentItem);
+	void updateField(TextField textField, int keyValue, BoardModelItem currentItem);
 
 	/**
 	 * Reset text field state to default. Can be used when deleting/clearing field value.

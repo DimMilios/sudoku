@@ -9,8 +9,7 @@ import static com.tei.model.SudokuConstants.*;
 
 public class TextField extends JFormattedTextField {
 
-	private int gridX;
-	private int gridY;
+	private Position position;
 	private int number;
 	private FieldState fieldState;
 
@@ -30,10 +29,9 @@ public class TextField extends JFormattedTextField {
 		init();
 	}
 
-	public TextField(int gridX, int gridY, int number) {
+	public TextField(Position position, int number) {
 		super(addFormatter());
-		this.gridX = gridX;
-		this.gridY = gridY;
+		this.position = position;
 		this.number = number;
 		init();
 		initState();
@@ -48,18 +46,10 @@ public class TextField extends JFormattedTextField {
 	private void initState() {
 		if (number >= 1 && number <= 9) {
 			this.fieldState = FieldStateFactory.create(DISABLED_STATE, this);
-			this.setText(String.valueOf(number));
+			this.setValue(number);
 		} else {
 		  this.fieldState = FieldStateFactory.create(DEFAULT_STATE, this);
 		}
-	}
-
-	public int getGridX() {
-		return gridX;
-	}
-
-	public int getGridY() {
-		return gridY;
 	}
 
 	public FieldState getFieldState() {
@@ -70,4 +60,7 @@ public class TextField extends JFormattedTextField {
 		this.fieldState = fieldState;
 	}
 
+	public Position getPosition() {
+		return position;
+	}
 }

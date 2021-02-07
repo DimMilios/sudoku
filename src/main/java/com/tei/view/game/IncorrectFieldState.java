@@ -11,8 +11,8 @@ public class IncorrectFieldState extends FieldState {
 
 	@Override
 	public void update() {
-		super.textField.setBorder(
-				BorderFactory.createLineBorder(new Color(200, 20, 20), 2));
-		super.textField.setForeground(Color.BLACK);
+//		super.textField.setBorder(
+//				BorderFactory.createLineBorder(new Color(200, 20, 20), 2));
+		super.textField.setForeground(new Color(220, 20, 20));
 	}
 }

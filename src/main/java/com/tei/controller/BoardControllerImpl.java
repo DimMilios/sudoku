@@ -7,7 +7,7 @@ import com.tei.view.game.InnerGamePanel;
 import com.tei.dao.BoardDAO;
 import com.tei.dao.GameDAO;
 import com.tei.log.StdOutHandler;
-import com.tei.model.BoardModel.BoardModelItem;
+import com.tei.model.BoardModelItem;
 import com.tei.view.MainView;
 
 import java.sql.SQLException;

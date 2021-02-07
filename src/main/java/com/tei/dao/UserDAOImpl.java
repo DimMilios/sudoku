@@ -14,35 +14,6 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public Iterable<UserModel> findAll() {
-		return null;
-	}
-
-	@Override
-	public UserModel findById(int id) {
-		return null;
-	}
-
-	@Override
-	public UserModel findByUsername(String username) {
-		String query = "SELECT * FROM USERS WHERE USERNAME=?";
-		try (Connection connection = mySqlConnection.getConnection();
-			 PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-			preparedStatement.setString(1, username);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			if (resultSet.next()) {
-				int id = resultSet.getInt("id");
-				String name = resultSet.getString("username");
-				return new UserModel(id, name);
-			}
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
 	public UserModel save(UserModel entity) throws SQLException {
 		String insertUser = "INSERT INTO USERS(username) VALUES (?)";
 		UserModel addedModel = null;

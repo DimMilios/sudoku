@@ -1,21 +1,25 @@
 package com.tei.model;
 
+import java.awt.*;
+
 public class SudokuConstants {
-	public final static String EASY = "Easy";
-	public final static String NORMAL = "Normal";
-	public final static String HARD = "Hard";
+	public static final String EASY = "Easy";
+	public static final String NORMAL = "Normal";
+	public static final String HARD = "Hard";
 //	public static final int EASY_MISSING_DIGITS = 43;
 	public static final int EASY_MISSING_DIGITS = 15;
 	public static final int NORMAL_MISSING_DIGITS = 51;
 	public static final int HARD_MISSING_DIGITS = 56;
 
-	public final static String USER_PANEL = "User panel";
-	public final static String GAME_PANEL = "Game panel";
-	public final static String HISTORY_PANEL = "History panel";
-	public final static String ABOUT_PANEL = "About panel";
+	public static Color SELECTED = new Color(246, 250, 255);
 
-	public final static int BOARD_SIZE = 9;
-	public final static int SQUARE_SIZE = 3;
+	public static final String USER_PANEL = "User panel";
+	public static final String GAME_PANEL = "Game panel";
+	public static final String HISTORY_PANEL = "History panel";
+	public static final String ABOUT_PANEL = "About panel";
+
+	public static final int BOARD_SIZE = 9;
+	public static final int SQUARE_SIZE = (int) Math.sqrt(BOARD_SIZE);
 
 	public static final String GAME_MENU = "Game";
 	public static final String OPTIONS_MENU = "Options";
@@ -31,5 +35,5 @@ public class SudokuConstants {
 	public static final String DEFAULT_STATE = "Default";
 	public static final String DISABLED_STATE = "Disabled";
 	public static final String INCORRECT_STATE = "Incorrect";
-	public static final String EMPTY_STATE = "EMPTY";
+	public static final String EMPTY_STATE = "Empty";
 }
